@@ -71,25 +71,52 @@ class Byt5LightningModule(LightningModule):
 
             self.log(f"accuracy/{validation_type}", validation, batch_size=self._finetuner_model.batch_size, prog_bar=True, logger=True, sync_dist=True, on_epoch=True, on_step=False)
 
+    # def on_test_end(self) -> None:
+    #     for validation_type in self._finetuner_model.validation:
+    #         validation = torch.tensor(self._accuracy[validation_type], dtype=torch.float, device=self.device)
+    #         dist.all_reduce(validation, op=dist.ReduceOp.SUM)
+    #         validation = torch.mean(validation)
+    #         validation /= dist.get_world_size()
+
+    #         if self.global_rank == 0:
+    #             self.logger.experiment.add_scalars('accuracy', {validation_type: validation}, self.current_epoch)
+
+    #         self._accuracy[validation_type] = []
     def on_test_end(self) -> None:
         for validation_type in self._finetuner_model.validation:
-            validation = torch.tensor(self._accuracy[validation_type], dtype=torch.float, device=self.device)
-            dist.all_reduce(validation, op=dist.ReduceOp.SUM)
-            validation = torch.mean(validation)
-            validation /= dist.get_world_size()
+            vals = torch.tensor(self._accuracy[validation_type], dtype=torch.float, device=self.device)
 
-            if self.global_rank == 0:
+            # Only do distributed reduction if DDP is actually initialized
+            if dist.is_available() and dist.is_initialized():
+                dist.all_reduce(vals, op=dist.ReduceOp.SUM)
+                vals = vals / dist.get_world_size()
+
+            validation = torch.mean(vals)
+
+            # In single-GPU, global_rank is 0 anyway; in DDP, keep the old behavior
+            if (not dist.is_available()) or (not dist.is_initialized()) or self.global_rank == 0:
                 self.logger.experiment.add_scalars('accuracy', {validation_type: validation}, self.current_epoch)
 
             self._accuracy[validation_type] = []
 
+
+
     def configure_optimizers(self):
         return AdamW(self.parameters(), lr=0.0001)
 
+    # def test_dataloader(self) -> DataLoader:
+    #     return DataLoader(self._test_dataset, batch_size=self._finetuner_model.batch_size,
+    #                       shuffle=False, num_workers=self._finetuner_model.workers,
+    #                       sampler=DistributedSampler(self._test_dataset))
+
     def test_dataloader(self) -> DataLoader:
-        return DataLoader(self._test_dataset, batch_size=self._finetuner_model.batch_size,
-                          shuffle=False, num_workers=self._finetuner_model.workers,
-                          sampler=DistributedSampler(self._test_dataset))
+        return DataLoader(
+            self._test_dataset,
+            batch_size=self._finetuner_model.batch_size,
+            shuffle=False,
+            num_workers=self._finetuner_model.workers,
+            sampler=None,  # no distributed sampler in single-GPU mode
+        )
 
     def on_train_epoch_end(self) -> None:
         test_set: DataLoader = self.test_dataloader()
