@@ -12,6 +12,12 @@ Process is already using 43.19 GiB.
 - ![alt text](image.png)
   - chitthar is using the whole GPUs on the system
 
+### How I solved this issue.
+- I found that he is using GPU 0 for this, and LLMPot want to use all GPUs.
+- So I forced it to use single GPU which GPU 1.
+- Now I get another error, which is related to PyTorch distribution sampler
+- It calls a function called DistributedSampler which requires the usage of all GPUs.
+
 ## Ploting error
 - On running this command:
   - python -m plots.mbtcp.bca_rva_protocol_generalization
