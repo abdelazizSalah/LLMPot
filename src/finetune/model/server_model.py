@@ -1,12 +1,19 @@
+'''
+@Reviewer: Abdelaziz Neamatallah
+@Date: 10.12.25
+@Description: Trying to understand how this works, and train the model on my dataset not on the default one.
+'''
+
 from typing import Optional
 
 
+# This shows the server configuration
 class ServerModel:
-    name: str
-    coils: Optional[int]
-    registers: Optional[int]
-    markers: Optional[int]
-    datablock: Optional[int]
+    name: str # S7comm, MBTCP
+    coils: Optional[int] # number of coils
+    registers: Optional[int] # number of registers
+    markers: Optional[int] # markers are same as coils but for S7comm
+    datablock: Optional[int] # datablocks are same as registers but for S7comm
 
     def __init__(self, **kwargs):
         for key, value in kwargs.items():
