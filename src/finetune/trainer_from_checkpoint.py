@@ -8,13 +8,13 @@ from lightning.pytorch.callbacks import EarlyStopping, ModelCheckpoint
 from lightning.pytorch.loggers import TensorBoardLogger
 from transformers import ByT5Tokenizer, T5ForConditionalGeneration
 
-from cfg import OUTPUTS_DIR
-from finetune.callbacks.metrics_logger import MetricsLogger
-from finetune.custom_lightning.byt5_lightning_data_module import Byt5LightningDataModule
-from finetune.custom_lightning.byt5_lightning_module import Byt5LightningModule
-from finetune.model.finetuner_model import FinetunerModel
-from utilities import load_dataset
-from utilities.file_tqdm_progress_bar import FileTQDMProgressBar
+from src.cfg import OUTPUTS_DIR
+from src.finetune.callbacks.metrics_logger import MetricsLogger
+from src.finetune.custom_lightning.byt5_lightning_data_module import Byt5LightningDataModule
+from src.finetune.custom_lightning.byt5_lightning_module import Byt5LightningModule
+from src.finetune.model.finetuner_model import FinetunerModel
+from src.utilities import load_dataset
+from src.utilities.file_tqdm_progress_bar import FileTQDMProgressBar
 
 
 def main():

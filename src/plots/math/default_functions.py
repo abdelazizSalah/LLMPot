@@ -2,9 +2,9 @@ import argparse
 import os
 import plotly.graph_objects as go
 
-from cfg import ASSETS
-from dataset_generation.math.func import Function
-from plots.from_csv import FONT_FAMILY
+from src.cfg import ASSETS
+from src.dataset_generation.math.func import Function
+from src.plots.from_csv import FONT_FAMILY
 
 NATURE = ['#C03221', '#87BCDE', '#EDB88B', '#545E75', '#3F826D', '#88498F']
 

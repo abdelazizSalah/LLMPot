@@ -5,10 +5,10 @@ import random
 
 import tqdm
 
-from finetune.utils.inference_runner import ModelLoader
 
-from cfg import DATASET_PARSED, EXPERIMENTS
-from finetune.model.finetuner_model import DatasetModel, FinetunerModel
+from src.finetune.utils.inference_runner import ModelLoader
+from src.cfg import DATASET_PARSED, EXPERIMENTS
+from src.finetune.model.finetuner_model import DatasetModel, FinetunerModel
 import argparse
 
 EXPERIMENT_FILE_NAME = "mbtcp-testbed.json"

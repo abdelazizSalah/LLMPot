@@ -8,22 +8,29 @@ from typing import Dict
 
 from lightning.pytorch.loggers import CSVLogger, TensorBoardLogger
 
-from cfg import EXPERIMENTS
-from finetune.byt5 import Byt5
-from finetune.llama2 import Llama2
-from finetune.model.finetuner_model import FinetunerModel
-from utilities.logger import TheLogger
+from src.cfg import EXPERIMENTS
+from src.finetune.byt5 import Byt5
+try:
+    from src.finetune.llama2 import Llama2
+except Exception as e:
+    Llama2 = None
+    print(f"Could not import Llama2: {e}")
+from src.finetune.model.finetuner_model import FinetunerModel
+from src.utilities.logger import TheLogger
 
 
 def main(model: str, experiment: str, pairs: Dict[int, int]):
     print(f"Experiment: {model}  / {experiment} / Pairs: {pairs} / CUDA: {os.environ.get('CUDA_VISIBLE_DEVICES')}")
+    # load and create finetuner model from experiment config
     with open(f"{EXPERIMENTS}/{model}/{experiment}", "r") as cfg:
         config = cfg.read()
         config = json.loads(config)
         finetuner_model = FinetunerModel(experiment, **config)
 
 
+    # trying each dataset
     for dataset in finetuner_model.datasets:
+        # pairs are given as sample_size:weights, weight means how many times to repeat the experiment with that size
         for it in range(0, pairs[dataset.size]):
             print(f"Dataset: {dataset} - {it}")
             try:

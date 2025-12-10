@@ -3,7 +3,7 @@ import csv
 from pymodbus.constants import Endian
 from pymodbus.payload import BinaryPayloadDecoder
 
-from cfg import DATASET_PARSED
+from src.cfg import DATASET_PARSED
 
 import matplotlib.pyplot as plt
 

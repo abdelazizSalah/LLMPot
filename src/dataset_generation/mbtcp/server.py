@@ -46,7 +46,7 @@ class MbtcpServer:
             update_logic_thread.join()
 
     @staticmethod
-    def update_control_logic(context: ModbusServerContext):
+    def update_control_logic(context: ModbusServerContext): # why is that empty? 
         pass
 
 def retrieve_args() -> Tuple[str, int]:

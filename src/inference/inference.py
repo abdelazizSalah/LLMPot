@@ -6,9 +6,9 @@ import torch
 from transformers import (AutoModelForCausalLM, AutoTokenizer, ByT5Tokenizer,
                           LlamaTokenizerFast, T5ForConditionalGeneration)
 
-from cfg import CHECKPOINTS, EXPERIMENTS, OUTPUTS_DIR
-from finetune.custom_lightning.byt5_lightning_module import Byt5LightningModule
-from finetune.model.finetuner_model import FinetunerModel
+from src.cfg import CHECKPOINTS, EXPERIMENTS, OUTPUTS_DIR
+from src.finetune.custom_lightning.byt5_lightning_module import Byt5LightningModule
+from src.finetune.model.finetuner_model import FinetunerModel
 
 
 class Inference:

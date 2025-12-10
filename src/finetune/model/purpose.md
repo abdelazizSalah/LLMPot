@@ -1,0 +1,1 @@
+- This folder contains the classes used to parse the data from JSON files which contains the configurations of each fine-tuned model existing in experiments folder.

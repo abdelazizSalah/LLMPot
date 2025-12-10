@@ -1,7 +1,7 @@
 import binascii
 from pymodbus.bit_read_message import ReadCoilsRequest
 
-from dataset_generation.mbtcp.client import MbtcpClient
+from src.dataset_generation.mbtcp.client import MbtcpClient
 
 client = MbtcpClient('localhost', 5020, 0, [1,3])
 

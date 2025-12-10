@@ -1,4 +1,4 @@
-from dataset_generation.mbtcp.server import MbtcpServer, retrieve_args
+from src.dataset_generation.mbtcp.server import MbtcpServer, retrieve_args
 
 
 class NoLogicServer(MbtcpServer):

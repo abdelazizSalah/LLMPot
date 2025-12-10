@@ -9,12 +9,12 @@ from beanie import init_beanie, WriteRules
 from motor.motor_asyncio import AsyncIOMotorClient
 from transformers import ByT5Tokenizer, T5ForConditionalGeneration
 
-from model.modbus.client import Client
-from model.modbus.request import Request
-from cfg import PROJECT_ROOT_DIR
-from finetune.custom_lightning.byt5_lightning_module import Byt5LightningModule
-from finetune.model.finetuner_model import FinetunerModel
-from utilities.logger import TheLogger
+from src.model.modbus.client import Client
+from src.model.modbus.request import Request
+from src.cfg import PROJECT_ROOT_DIR
+from src.finetune.custom_lightning.byt5_lightning_module import Byt5LightningModule
+from src.finetune.model.finetuner_model import FinetunerModel
+from src.utilities.logger import TheLogger
 
 logger = TheLogger("modbus_server", f"{PROJECT_ROOT_DIR}/logs")
 

@@ -2,7 +2,7 @@ import lightning as pl
 from torch.utils.data import Dataset, DataLoader
 from transformers import PreTrainedTokenizer
 
-from finetune.custom_lightning.llama2_dataset import Llama2Dataset
+from src.finetune.custom_lightning.llama2_dataset import Llama2Dataset
 
 
 class Llama2LightningDataModule(pl.LightningDataModule):

@@ -4,9 +4,9 @@ import json
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM, LlamaTokenizerFast, BitsAndBytesConfig
 from peft import PeftModel,LoraConfig, TaskType, get_peft_model, prepare_model_for_kbit_training
-from cfg import CHECKPOINTS, EXPERIMENTS
-from finetune.custom_lightning.llama2_lightning_module import Llama2LightningModule
-from finetune.model.finetuner_model import FinetunerModel
+from src.cfg import CHECKPOINTS, EXPERIMENTS
+from src.finetune.custom_lightning.llama2_lightning_module import Llama2LightningModule
+from src.finetune.model.finetuner_model import FinetunerModel
 
 experiment = "llama-2-testing.json"
 with open(f"{EXPERIMENTS}/{experiment}", "r") as cfg:
@@ -75,7 +75,7 @@ def formatting_inference(sample):
             f"{sample} [/INST]\n")
 
 for _ in range(4):
-   
+
     request = input('Llama prompt: ')
     eval_prompt = formatting_inference(request)
     model_input = tokenizer(eval_prompt, return_tensors="pt").to("cuda")

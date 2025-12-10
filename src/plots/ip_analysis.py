@@ -8,7 +8,7 @@ import plotly.io as pio
 from numpy import size
 from plotly.subplots import make_subplots
 
-from cfg import ASSETS
+from src.cfg import ASSETS
 
 pio.kaleido.scope.mathjax = None
 

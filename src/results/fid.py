@@ -3,9 +3,9 @@ import json
 import numpy as np
 from scipy.linalg import sqrtm
 
-from cfg import EXPERIMENTS
-from finetune.model.finetuner_model import DatasetModel, FinetunerModel
-from finetune.utils.inference_runner import ModelLoader
+from src.cfg import EXPERIMENTS
+from src.finetune.model.finetuner_model import DatasetModel, FinetunerModel
+from src.finetune.utils.inference_runner import ModelLoader
 
 with open(f"{EXPERIMENTS}/byt5-base/mbtcp-protocol-emulation.json", "r") as cfg:
     config = cfg.read()

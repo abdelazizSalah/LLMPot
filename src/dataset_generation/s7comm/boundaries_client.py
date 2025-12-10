@@ -1,9 +1,9 @@
 import random
 from typing import List, Callable, Any
 from snap7.types import Areas
-from dataset_generation.s7comm.client import S7Client, retrieve_args
-from dataset_generation.utils import value_generator
-from finetune.model.range_model import RangeModel
+from src.dataset_generation.s7comm.client import S7Client, retrieve_args
+from src.dataset_generation.utils import value_generator
+from src.finetune.model.range_model import RangeModel
 
 
 class BoundariesClient(S7Client):

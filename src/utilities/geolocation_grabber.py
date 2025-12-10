@@ -2,7 +2,7 @@ import pandas as pd
 import ipinfo
 import json
 
-from cfg import PROJECT_ROOT_DIR
+from src.cfg import PROJECT_ROOT_DIR
 
 
 def get_ip_info(ip):

@@ -1,4 +1,4 @@
-from utilities.model.filename import Filename
+from src.utilities.model.filename import Filename
 
 
 class ValidationDataFilename(Filename):

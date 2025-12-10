@@ -1,4 +1,4 @@
-from plots.from_csv import NATURE, Plots
+from src.plots.from_csv import NATURE, Plots
 
 plot = Plots("mbtcp-protocol-generalization.json", "20240423T2013")
 

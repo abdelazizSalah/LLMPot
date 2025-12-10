@@ -7,11 +7,11 @@ from beanie import init_beanie
 from flask import Flask, request, render_template, redirect
 from motor.motor_asyncio import AsyncIOMotorClient
 
-from cfg import PROJECT_ROOT_DIR
-from model.web.client import Client
-from model.web.request import Request
-from server.persistence_decorator_web import log_transport
-from utilities.no_torch_logger import NoTorchLogger
+from src.cfg import PROJECT_ROOT_DIR
+from src.model.web.client import Client
+from src.model.web.request import Request
+from src.server.persistence_decorator_web import log_transport
+from src.utilities.no_torch_logger import NoTorchLogger
 
 DIR = f"{PROJECT_ROOT_DIR}/emulator"
 logger = NoTorchLogger("web_server", f"{DIR}/logs")

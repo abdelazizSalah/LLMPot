@@ -1,6 +1,6 @@
 import json
-from cfg import EXPERIMENTS
-from finetune.model.finetuner_model import FinetunerModel
+from src.cfg import EXPERIMENTS
+from src.finetune.model.finetuner_model import FinetunerModel
 
 
 def load_cfg(model: str, experiment: str, timestamp: str = "") -> FinetunerModel:

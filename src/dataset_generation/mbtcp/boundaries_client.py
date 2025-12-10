@@ -11,9 +11,9 @@ from pymodbus.register_read_message import ReadHoldingRegistersRequest
 from pymodbus.register_write_message import (WriteMultipleRegistersRequest,
                                              WriteSingleRegisterRequest)
 
-from dataset_generation.mbtcp.client import MbtcpClient, retrieve_args
-from dataset_generation.utils import value_generator
-from finetune.model.range_model import RangeModel
+from src.dataset_generation.mbtcp.client import MbtcpClient, retrieve_args
+from src.dataset_generation.utils import value_generator
+from src.finetune.model.range_model import RangeModel
 
 # def execute(m_elem, addr_low, addr_high, max_addr, val_low, val_high):
 #     i = 0

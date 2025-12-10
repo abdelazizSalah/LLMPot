@@ -2,7 +2,7 @@ import itertools
 import random
 from typing import List
 
-from finetune.model.range_model import RangeModel
+from src.finetune.model.range_model import RangeModel
 
 
 def generate_random_value(values: RangeModel, elements=0):

@@ -1,14 +1,14 @@
 from datasets import Dataset, Features, Value, load_dataset
-from finetuner import Finetuner
+from src.finetune.finetuner import Finetuner
 from transformers import PreTrainedModel, AutoTokenizer, AutoModelForCausalLM, PreTrainedTokenizer, PreTrainedTokenizerFast
 from peft.peft_model import PeftModel
 
-from cfg import DATASET_TEST, DATASET_TRAIN, DATASET_VAL
-from finetune.custom_lightning.llama2_lightning_data_module import \
+from src.cfg import DATASET_TEST, DATASET_TRAIN, DATASET_VAL
+from src.finetune.custom_lightning.llama2_lightning_data_module import \
     Llama2LightningDataModule
-from finetune.custom_lightning.llama2_lightning_module import \
+from src.finetune.custom_lightning.llama2_lightning_module import \
     Llama2LightningModule
-from finetune.model.finetuner_model import FinetunerModel
+from src.finetune.model.finetuner_model import FinetunerModel
 
 
 class Llama2(Finetuner):

@@ -4,7 +4,7 @@ import os
 import pandas as pd
 from sklearn.model_selection import train_test_split
 
-from cfg import DATASET_PARSED, DATASET_TRAIN, DATASET_TEST, DATASET_VAL
+from src.cfg import DATASET_PARSED, DATASET_TRAIN, DATASET_TEST, DATASET_VAL
 
 
 def split(csv: str, experiment: str):

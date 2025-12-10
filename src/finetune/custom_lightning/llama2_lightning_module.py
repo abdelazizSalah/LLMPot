@@ -10,10 +10,10 @@ from torch.utils.data import DataLoader, DistributedSampler
 from peft.peft_model import PeftModel
 from transformers import PreTrainedModel, PreTrainedTokenizer
 
-from cfg import CHECKPOINTS
-from finetune.model.finetuner_model import FinetunerModel
-from validation.mbtcp_validator import Validator
-from validation.model.result import Result
+from src.cfg import CHECKPOINTS
+from src.finetune.model.finetuner_model import FinetunerModel
+from src.validation.mbtcp_validator import Validator
+from src.validation.model.result import Result
 
 
 class Llama2LightningModule(LightningModule):

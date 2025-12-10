@@ -2,7 +2,7 @@ import argparse
 import json
 from ast import main
 
-from cfg import PROJECT_ROOT_DIR
+from src.cfg import PROJECT_ROOT_DIR
 
 def parse(database, threshold):
     input_file = f'{PROJECT_ROOT_DIR}/scripts/results/malicious_ip_{database}.jsonl'

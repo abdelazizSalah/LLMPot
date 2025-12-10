@@ -6,9 +6,9 @@ from typing import Tuple, List
 import numpy as np
 from pymodbus.client import ModbusTcpClient
 
-from dataset_generation.mbtcp.invalid_function import MbtcpCustomInvalidFunctionRequest
+from src.dataset_generation.mbtcp.invalid_function import MbtcpCustomInvalidFunctionRequest
 
-
+# This is an abstract client for Modbus TCP protocol, which will be instantiated by boundaries_client
 class MbtcpClient(ModbusTcpClient):
     MAX_ADDRESS = 65535
     MAX_REG_VALUE = 65535
@@ -18,7 +18,7 @@ class MbtcpClient(ModbusTcpClient):
         self._samples_num = samples_num
         self.ip = ip
         self.port = port
-        self._functions = []
+        self._functions = [] # these functions will be populated by child classes
         self._codes = codes
 
         extra_samples_num = samples_num // 100
@@ -37,11 +37,11 @@ class MbtcpClient(ModbusTcpClient):
         request = MbtcpCustomInvalidFunctionRequest(false_function_code)
         return self.execute(request)
 
-    def start_client(self):
+    def start_client(self): # why is it empty?
         pass
 
     def execute_functions(self, delay: float = 0):
-        self.connect()
+        self.connect() # but this .connect() does not exist, but exist in pymodbus.client.ModbusTcpClient (parent)
         for function, args, kwargs in self._functions:
             request = function(*args, **kwargs)
             self.transaction.tid = self.transaction_ids.pop()

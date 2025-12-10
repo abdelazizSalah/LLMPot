@@ -3,7 +3,7 @@ import os
 
 import pandas as pd
 
-from utilities.utils import load_cfg
+from src.utilities.utils import load_cfg
 
 
 def main(model: str, experiment: str):

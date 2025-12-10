@@ -7,10 +7,10 @@ from torch.utils.data import DataLoader
 from tqdm import tqdm
 from transformers import ByT5Tokenizer, T5ForConditionalGeneration
 
-import utilities.load_dataset
-from cfg import OUTPUTS_DIR
-from finetune.custom_lightning.byt5_lightning_module import Byt5LightningModule
-from finetune.model.finetuner_model import FinetunerModel
+import src.utilities.load_dataset
+from src.cfg import OUTPUTS_DIR
+from src.finetune.custom_lightning.byt5_lightning_module import Byt5LightningModule
+from src.finetune.model.finetuner_model import FinetunerModel
 
 
 def main():

@@ -1,7 +1,7 @@
 import pandas as pd
 from datasets import load_dataset, Dataset
 
-from cfg import OUTPUTS_DIR
+from src.cfg import OUTPUTS_DIR
 
 
 def load_train_val_dfs(csv_filename):

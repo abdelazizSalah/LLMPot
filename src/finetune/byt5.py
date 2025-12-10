@@ -2,11 +2,11 @@ from datasets import Dataset, Features, Value, load_dataset
 from transformers import (ByT5Tokenizer, PreTrainedModel, PreTrainedTokenizer,
                           T5ForConditionalGeneration)
 
-from cfg import DATASET_TEST, DATASET_TRAIN, DATASET_VAL
-from finetune.custom_lightning.byt5_lightning_data_module import Byt5LightningDataModule
-from finetune.custom_lightning.byt5_lightning_module import Byt5LightningModule
-from finetune.finetuner import Finetuner
-from finetune.model.finetuner_model import FinetunerModel
+from src.cfg import DATASET_TEST, DATASET_TRAIN, DATASET_VAL
+from src.finetune.custom_lightning.byt5_lightning_data_module import Byt5LightningDataModule
+from src.finetune.custom_lightning.byt5_lightning_module import Byt5LightningModule
+from src.finetune.finetuner import Finetuner
+from src.finetune.model.finetuner_model import FinetunerModel
 
 
 class Byt5(Finetuner):

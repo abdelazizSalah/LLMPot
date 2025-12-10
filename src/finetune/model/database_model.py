@@ -1,6 +1,6 @@
 from typing import List, Optional
-from finetune.model.range_model import RangeModel
-from finetune.model.server_model import ServerModel
+from src.finetune.model.range_model import RangeModel
+from src.finetune.model.server_model import ServerModel
 
 
 class DatasetModel:

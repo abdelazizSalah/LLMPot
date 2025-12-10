@@ -4,9 +4,9 @@ import time
 from typing import List, Optional
 from lightning.fabric.plugins.precision.precision import _PRECISION_INPUT
 
-from cfg import CHECKPOINTS, LOGS
-from finetune.model.database_model import DatasetModel
-from finetune.model.lora import Lora
+from src.cfg import CHECKPOINTS, LOGS
+from src.finetune.model.database_model import DatasetModel
+from src.finetune.model.lora import Lora
 
 
 class TestExperiment:

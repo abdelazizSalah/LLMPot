@@ -9,10 +9,10 @@ import time
 from multiprocessing import Process
 from typing import Any
 
-from cfg import DATASET_DUMPS, DATASET_PARSED, EXPERIMENTS
-from dataset_generation.parse import parse_with_file
-from dataset_generation.split import split
-from finetune.model.finetuner_model import FinetunerModel
+from src.cfg import DATASET_DUMPS, DATASET_PARSED, EXPERIMENTS
+from src.dataset_generation.parse import parse_with_file
+from src.dataset_generation.split import split
+from src.finetune.model.finetuner_model import FinetunerModel
 
 
 def parse_packets(port: int, protocol: str, context_length: int, output_filename: str, experiment: str):
@@ -35,33 +35,45 @@ async def main(port: int, interface: str, model: str, experiment: str, overwrite
     try:
         connection_ip_addr = "127.0.0.1"
         with open(f"{EXPERIMENTS}/{model}/{experiment}", "r") as cfg:
-            config = cfg.read()
-            config = json.loads(config)
-            finetuner_model = FinetunerModel(experiment, **config)
-            finetuner_model.experiment = experiment
+            config = cfg.read() # load experiment config
+            config = json.loads(config) # parse json
+            finetuner_model = FinetunerModel(experiment, **config) # create finetuner model
+            finetuner_model.experiment = experiment # this line is redundant...
 
+        # As they mentioned in the paper, they test dataset of size x, then if not good enough, they test 2x and so on.
         for dataset in finetuner_model.datasets:
             print(f'Experiment {dataset} running...')
 
+            # They check if the dataset exists before, so do not repeat it unless overwrite is True
             if os.path.exists(f"{DATASET_PARSED}/{experiment}/{dataset}.csv") and overwrite is False:
                 print(f'Experiment {dataset} already exists. Skipping...')
                 continue
             elif overwrite:
                 print(f'Experiment {dataset} already exists. Overwriting...')
 
+            # Assign the current dataset to the finetuner model
             finetuner_model.current_dataset = dataset
+
+
             if finetuner_model.current_dataset.server:
+                # for no_logic_server, server_class_str becomes NoLogicServer
                 server_class_str = ''.join(word.title() for word in finetuner_model.current_dataset.server.name.split('_'))
                 client_class_str = ''.join(word.title() for word in finetuner_model.current_dataset.client.split('_'))
 
-                server_class = getattr(importlib.import_module(f"dataset_generation.{finetuner_model.current_dataset.protocol}.{finetuner_model.current_dataset.server.name}"), server_class_str)
-                client_class = getattr(importlib.import_module(f"dataset_generation.{finetuner_model.current_dataset.protocol}.{finetuner_model.current_dataset.client}"), client_class_str)
-
+                # open the folder dataset_generation/protocol/server_name.py and get the class server_class_str
+                # e.g. for no_logic_server, dataset_generation.mbtcp.no_logic_server.NoLogicServer
+                # then later we can instantiate it like server_class(ip, port, *args)
+                server_class = getattr(importlib.import_module(f"src.dataset_generation.{finetuner_model.current_dataset.protocol}.{finetuner_model.current_dataset.server.name}"), server_class_str)
+                client_class = getattr(importlib.import_module(f"src.dataset_generation.{finetuner_model.current_dataset.protocol}.{finetuner_model.current_dataset.client}"), client_class_str)
+    
+            # open tcpdump to capture packets on the given interface and write to temp.pcap which most probably will be deleted later
             tcpdump_process = subprocess.Popen(["tcpdump", "-i", interface, "-w", f"{DATASET_DUMPS}/temp.pcap"])
 
-            args = getattr(finetuner_model.current_dataset, f"{finetuner_model.current_dataset.protocol}_args")
-            print(*args)
-            server_inst = server_class(connection_ip_addr, port, *args)
+            args = getattr(finetuner_model.current_dataset, f"{finetuner_model.current_dataset.protocol}_args") # gets the class DatasetModel
+            print(*args) # this returns all parameters of dataset, like protocol, size, functions and so on.
+
+
+            server_inst = server_class(connection_ip_addr, port, *args) # then we instantiate the server
 
             server_thread = Process(target=server_inst.start, daemon=True)
             server_thread.start()
@@ -75,7 +87,7 @@ async def main(port: int, interface: str, model: str, experiment: str, overwrite
                                        finetuner_model.current_dataset.values,
                                        finetuner_model.current_dataset.multi_elements)
 
-            client_inst.start_client()
+            client_inst.start_client() # but this is always empty in all provided clients ??
             print(f'Experiment {dataset} finished.')
             thread = threading.Thread(target=client_inst.execute_functions, daemon=True)
             thread.start()

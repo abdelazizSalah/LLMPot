@@ -6,9 +6,9 @@ import time
 import torch
 from transformers import ByT5Tokenizer, T5ForConditionalGeneration
 
-from cfg import CHECKPOINTS, EXPERIMENTS
-from finetune.custom_lightning.byt5_lightning_module import Byt5LightningModule
-from finetune.model.finetuner_model import FinetunerModel
+from src.cfg import CHECKPOINTS, EXPERIMENTS
+from src.finetune.custom_lightning.byt5_lightning_module import Byt5LightningModule
+from src.finetune.model.finetuner_model import FinetunerModel
 
 
 class ModelLoader:

@@ -5,10 +5,10 @@ from functools import wraps
 from beanie import WriteRules
 from flask import request
 
-from cfg import PROJECT_ROOT_DIR
-from model.web.client import Client
-from model.web.request import Request
-from utilities.no_torch_logger import NoTorchLogger
+from src.cfg import PROJECT_ROOT_DIR
+from src.model.web.client import Client
+from src.model.web.request import Request
+from src.utilities.no_torch_logger import NoTorchLogger
 
 logger = NoTorchLogger("web_server_pers", f"{PROJECT_ROOT_DIR}/logs")
 

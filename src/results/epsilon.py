@@ -8,8 +8,8 @@ import pandas as pd
 from pymodbus.constants import Endian
 from pymodbus.payload import BinaryPayloadDecoder
 
-from finetune.model.finetuner_model import FinetunerModel
-from utilities.utils import load_cfg
+from src.finetune.model.finetuner_model import FinetunerModel
+from src.utilities.utils import load_cfg
 
 
 def calculate_error_margin(finetuner_model: FinetunerModel, file: str, output_registers: int, input_registers: int, func: str) -> Tuple[float, float, float]:

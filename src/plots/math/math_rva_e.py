@@ -7,8 +7,8 @@ import pandas as pd
 import plotly.graph_objects as go
 import plotly.io as pio
 
-from cfg import ASSETS
-from utilities.utils import load_cfg
+from src.cfg import ASSETS
+from src.utilities.utils import load_cfg
 
 pio.kaleido.scope.mathjax = None
 pd.options.mode.copy_on_write = True

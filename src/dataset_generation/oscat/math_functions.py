@@ -3,8 +3,8 @@ import time
 from pymodbus.constants import Endian
 from pymodbus.payload import BinaryPayloadBuilder
 
-from dataset_generation.math.func import Function
-from dataset_generation.oscat.client import MbtcpClient, retrieve_args
+from src.dataset_generation.math.func import Function
+from src.dataset_generation.oscat.client import MbtcpClient, retrieve_args
 
 
 class MathClient(MbtcpClient):

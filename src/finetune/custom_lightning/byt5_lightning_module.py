@@ -9,10 +9,10 @@ from torch.optim import AdamW
 from torch.utils.data import DataLoader, DistributedSampler
 from transformers import PreTrainedModel, PreTrainedTokenizer
 
-from finetune.model.finetuner_model import FinetunerModel
-from validation.mbtcp_validator import Validator as MBTCPValidator
-from validation.s7comm_validator import Validator as S7Validator
-from validation.model.result import Result
+from src.finetune.model.finetuner_model import FinetunerModel
+from src.validation.mbtcp_validator import Validator as MBTCPValidator
+from src.validation.s7comm_validator import Validator as S7Validator
+from src.validation.model.result import Result
 
 
 class Byt5LightningModule(LightningModule):

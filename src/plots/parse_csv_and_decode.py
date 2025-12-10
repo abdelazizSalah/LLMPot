@@ -7,7 +7,7 @@ import plotly.graph_objects as go
 import plotly.io as pio
 from scipy.stats import ks_2samp
 
-from cfg import ASSETS, DATASET_PARSED
+from src.cfg import ASSETS, DATASET_PARSED
 
 pio.kaleido.scope.mathjax = None
 

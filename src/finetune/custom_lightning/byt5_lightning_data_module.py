@@ -2,7 +2,7 @@ import lightning as pl
 from torch.utils.data import Dataset, DataLoader
 from transformers import PreTrainedTokenizer
 
-from finetune.custom_lightning.byt5_dataset import Byt5Dataset
+from src.finetune.custom_lightning.byt5_dataset import Byt5Dataset
 
 
 class Byt5LightningDataModule(pl.LightningDataModule):

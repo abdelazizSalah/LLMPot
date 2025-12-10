@@ -1,0 +1,5 @@
+- On running this command:
+  - python -m plots.mbtcp.bca_rva_protocol_generalization
+- I get this error:
+  - FileNotFoundError: E:\GitHub\LLMPot/checkpoints/byt5-small/mbtcp-protocol-generalization.json/mbtcp-boundaries_client-c0-s1600-f1_5_15_3_6_16-v0_65535-a0_39-sc40-sr40/csv/20240423T2013/metrics.csv not found
+  - This file is not even on their github repo. 

@@ -1,6 +1,6 @@
 from pytorch_lightning.utilities import rank_zero_only
 
-from utilities.no_torch_logger import NoTorchLogger
+from src.utilities.no_torch_logger import NoTorchLogger
 
 
 class TheLogger(NoTorchLogger):

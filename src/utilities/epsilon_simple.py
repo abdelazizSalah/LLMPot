@@ -3,7 +3,7 @@ from typing import Tuple
 
 import pandas as pd
 
-from cfg import CHECKPOINTS
+from src.cfg import CHECKPOINTS
 
 
 def calculate_error_margin(path: str, file: str) -> Tuple[float, float, float]:

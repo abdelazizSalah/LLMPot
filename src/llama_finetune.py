@@ -10,8 +10,8 @@ from peft import LoraConfig, get_peft_model
 from peft import prepare_model_for_kbit_training
 from transformers import AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig, LlamaTokenizerFast
 
-from cfg import OUTPUTS_DIR, PROJECT_ROOT_DIR
-from utilities import logger
+from src.cfg import OUTPUTS_DIR, PROJECT_ROOT_DIR
+from src.utilities import logger
 
 
 def formatting_inference(tokenizer, sample: str):

@@ -1,7 +1,7 @@
 import argparse
 
 from torch import le
-from cfg import PROJECT_ROOT_DIR
+from src.cfg import PROJECT_ROOT_DIR
 
 
 def read_ips_from_file(file_path):

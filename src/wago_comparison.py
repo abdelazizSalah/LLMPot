@@ -2,7 +2,7 @@ import json
 import socket
 import argparse
 import pandas as pd
-from cfg import OUTPUTS_DIR
+from src.cfg import OUTPUTS_DIR
 # from utilities.load_dataset import load_dataset_from_file
 
 class Result:

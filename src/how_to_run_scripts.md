@@ -1,0 +1,2 @@
+- To run any script in this folder, we must run it as follows:
+  - > python -m (folder_name.sub_folder_name.script_name.py)

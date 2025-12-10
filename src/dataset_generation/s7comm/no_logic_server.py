@@ -1,5 +1,5 @@
 from snap7.types import srvAreaDB, srvAreaMK
-from dataset_generation.s7comm.server import S7Comm, retrieve_args
+from src.dataset_generation.s7comm.server import S7Comm, retrieve_args
 
 
 class NoLogicServer(S7Comm):

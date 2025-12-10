@@ -11,10 +11,10 @@ from peft.tuners.lora import LoraConfig
 from transformers import (BitsAndBytesConfig, PreTrainedModel,
                           PreTrainedTokenizer)
 
-from cfg import OUTPUTS_DIR
-from finetune.callbacks.metrics_logger import MetricsLogger
-from finetune.model.finetuner_model import FinetunerModel
-from utilities.logger import TheLogger
+from src.cfg import OUTPUTS_DIR
+from src.finetune.callbacks.metrics_logger import MetricsLogger
+from src.finetune.model.finetuner_model import FinetunerModel
+from src.utilities.logger import TheLogger
 
 
 class Finetuner:

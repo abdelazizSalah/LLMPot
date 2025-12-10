@@ -3,7 +3,7 @@ import json
 
 import requests
 
-from cfg import PROJECT_ROOT_DIR
+from src.cfg import PROJECT_ROOT_DIR
 
 ABUSEIPDB_API_KEY = 'f1c4f9f70a8bf7eb392e86ff3439284fc4a23041aa54ef7b23ae6d42798a0826b4c756bd1e624f20'
 
