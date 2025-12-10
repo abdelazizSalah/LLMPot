@@ -108,7 +108,8 @@ class FinetunerModel:
     '''
     accelerator: str = "cuda" # This is PyTorch lightning accelerator
     devices = len(str(os.getenv('CUDA_VISIBLE_DEVICES')).split(",")) if os.getenv('CUDA_VISIBLE_DEVICES') else 1
-    strategy: str = "ddp" #"deepspeed_stage_2_offload"
+    # strategy: str = "ddp" #"deepspeed_stage_2_offload"
+    strategy: str = "auto" # use single GPU instead of multiple
 
     validation = ["exact", "validator"] # exact -> BCA, validator -> RVA
 
