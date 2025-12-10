@@ -8,6 +8,9 @@ Process is already using 43.19 GiB.
 - Main reason is that GPUs on the server are almost completely full before training start.
 - And the code uses all available GPUs on the server to train the model.
 
+### Checking the avilability of GPUs
+- ![alt text](image.png)
+  - chitthar is using the whole GPUs on the system
 
 ## Ploting error
 - On running this command:

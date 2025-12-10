@@ -80,6 +80,7 @@ class Finetuner:
             mode='min',
             auto_insert_metric_name=False
         )
+        print('inside train method')
         callbacks = [checkpoint_callback, MetricsLogger()]
 
         if self._finetuner_model.patience > 0:

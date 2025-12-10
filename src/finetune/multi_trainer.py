@@ -34,6 +34,8 @@ def main(model: str, experiment: str, pairs: Dict[int, int]):
         for it in range(0, pairs[dataset.size]):
             print(f"Dataset: {dataset} - {it}")
             try:
+                print(f"Starting experiment for dataset: {dataset} with size: {dataset.size}")
+                print('----------------------------------------\n dataset assigned')
                 finetuner_model.current_dataset = dataset
                 log = TheLogger(str(finetuner_model), finetuner_model.log_output_dir)
                 if os.path.exists(f"{finetuner_model.experiment_dataset_result_path}/{finetuner_model.start_datetime}"):
@@ -49,7 +51,9 @@ def main(model: str, experiment: str, pairs: Dict[int, int]):
                     finetuner = Llama2(finetuner_model)
                     finetuner.train([tensor_logger, csv_logger])
                 elif finetuner_model.model_type == "google":
+                    print("Using Byt5 model for fine-tuning.")
                     finetuner = Byt5(finetuner_model)
+                    print('training started')
                     finetuner.train([tensor_logger, csv_logger])
 
                 end_time = time.time()
@@ -79,5 +83,6 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     args.p = args_to_dict(args.p)
+    print(f"Arguments: Model: {args.model} / Config: {args.cfg} / Pairs: {args.p}")
 
     main(args.model, args.cfg, args.p)
