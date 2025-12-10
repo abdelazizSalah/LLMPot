@@ -1,3 +1,8 @@
+'''
+@Reviewer: Abdelaziz Neamatallah
+@Date: 10.12.25
+@Description: Trying to understand how this works, and train the model on my dataset not on the default one.
+'''
 from datasets import Dataset, Features, Value, load_dataset
 from transformers import (ByT5Tokenizer, PreTrainedModel, PreTrainedTokenizer,
                           T5ForConditionalGeneration)
@@ -8,7 +13,7 @@ from src.finetune.custom_lightning.byt5_lightning_module import Byt5LightningMod
 from src.finetune.finetuner import Finetuner
 from src.finetune.model.finetuner_model import FinetunerModel
 
-
+# This class is responsible for fine-tuning Byt5 models
 class Byt5(Finetuner):
 
     def __init__(self, finetuner_model: FinetunerModel):
@@ -17,7 +22,7 @@ class Byt5(Finetuner):
             'source_text': Value('string'),
             'target_text': Value('string')
         })
-
+        # it starts by loading training, validation, and test datasets
         dataset = self._load_dataset()
         self._data_module = Byt5LightningDataModule(dataset=dataset,
                                                     tokenizer=self._tokenizer,
