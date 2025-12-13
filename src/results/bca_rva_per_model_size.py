@@ -38,6 +38,7 @@ def main(model: str, experiment: str):
             print(f"Loading metrics for model: {model}, version: {version}, dataset size: {dataset.size}, from path: {finetuner_model.experiment_csv_metrics_path}")
             with open(f"{finetuner_model.experiment_csv_metrics_path}") as metrics:
                 new_metrics = pd.read_csv(metrics)
+                print(f'new metrics columns: {new_metrics.columns}')
                 new_metrics['size'] = dataset.size
                 new_metrics['version'] = version
             #! error is here.
