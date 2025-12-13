@@ -184,9 +184,8 @@ class FinetunerModel:
         os.makedirs(os.path.dirname(path), exist_ok=True)
         return path
 
-    @property # error is here.
+    @property 
     def experiment_model_result_path(self):
-        print(f"return is {CHECKPOINTS}/{self.model_name}")
         return f"{CHECKPOINTS}/{self.model_name}"
 
     @property

@@ -1,3 +1,9 @@
+'''
+@Reviewer: Abdelaziz Neamatallah
+@Date: 13.12.25
+@Description: Trying to analyze this script to understand what is its functionality.
+'''
+
 import argparse
 import os
 
@@ -7,13 +13,19 @@ from src.utilities.utils import load_cfg
 
 
 def main(model: str, experiment: str):
+    # Loading the finetuner model with the specified model and experiment configuration
     finetuner_model = load_cfg(model, experiment)
 
     print("model, size, accuracy/validator, accuracy/exact")
+    # creating dataframe to store matching rows
     matching_df  = pd.DataFrame()
+
+    # iterating through each dataset in the finetuner model
     for dataset in finetuner_model.datasets:
+        # assigning the current dataset to the finetuner model
         finetuner_model.current_dataset = dataset
 
+        # 
         versions = os.listdir(finetuner_model.experiment_dataset_result_path)
         versions = [folder for folder in versions if not folder == 'csv']
         print("Found versions:", versions)
@@ -23,8 +35,9 @@ def main(model: str, experiment: str):
                 new_metrics = pd.read_csv(metrics)
                 new_metrics['size'] = dataset.size
                 new_metrics['version'] = version
-
-            checkpoint_files = os.listdir(f"{finetuner_model.experiment_instance_result_path}/checkpoints/")
+            #! error is here.
+            # checkpoint_files = os.listdir(f"{finetuner_model.experiment_instance_result_path}/checkpoints/") # there is no folder called checkpoints in this path.
+            checkpoint_files = os.listdir(f"{finetuner_model.experiment_instance_result_path}") # there is no folder called checkpoints in this path.
             best_checkpoints = [file for file in checkpoint_files if file.startswith('best-')][0]
             best_epoch = best_checkpoints.split('-')[1].split('.')[0]
 
