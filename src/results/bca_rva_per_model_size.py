@@ -25,12 +25,17 @@ def main(model: str, experiment: str):
         # assigning the current dataset to the finetuner model
         finetuner_model.current_dataset = dataset
 
-        # 
+        # list all versions in the experiments, and neglect the csv folder -> [20240918T1049,20240918T1110, 20240918T1717, YYYYMMDD*T*HHMM]
         versions = os.listdir(finetuner_model.experiment_dataset_result_path)
         versions = [folder for folder in versions if not folder == 'csv']
         print("Found versions:", versions)
+        # iterating through each version of the dataset
         for version in versions:
+            # assigning the current version to the finetuner model datetime.
             finetuner_model.start_datetime = version
+
+            # getting the metris for the current experiment
+            print(f"Loading metrics for model: {model}, version: {version}, dataset size: {dataset.size}, from path: {finetuner_model.experiment_csv_metrics_path}")
             with open(f"{finetuner_model.experiment_csv_metrics_path}") as metrics:
                 new_metrics = pd.read_csv(metrics)
                 new_metrics['size'] = dataset.size
