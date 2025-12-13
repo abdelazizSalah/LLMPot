@@ -10,5 +10,4 @@ def load_cfg(model: str, experiment: str, timestamp: str = "") -> FinetunerModel
         config = json.loads(config)
         finetuner = FinetunerModel(experiment, **config)
         finetuner.start_datetime = timestamp
-
         return finetuner

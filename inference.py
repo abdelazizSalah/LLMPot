@@ -53,8 +53,8 @@ Example Modbus request:
     https://www.fernhillsoftware.com/help/drivers/modbus/modbus-protocol.html
     I got many examples from here, and the results from LLMPot never correct.
 '''
-request = "021b00000008000600020002"
-# request = "00 0A 00 00 00 06 01 02 01 F4 00 20".replace(" ", "")
+# request = "021b00000008000600020002"
+request = "00 05 00 00 00 06 02 01 00 20 00 0C".replace(" ", "")
 response = pipe(request)
 
 print(response)
