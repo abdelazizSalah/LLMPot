@@ -42,7 +42,6 @@ def main(model: str, experiment: str):
                 new_metrics['version'] = version
                 print(f'new metrics columns: {new_metrics.columns}')
                 print(f'new metrics size: {new_metrics.size}')
-                print(f'new metrics version: {new_metrics.version}')
             #! error is here.
             # checkpoint_files = os.listdir(f"{finetuner_model.experiment_instance_result_path}/checkpoints/")
             # best_checkpoints = [file for file in checkpoint_files if file.startswith('best-')][0]
@@ -53,6 +52,7 @@ def main(model: str, experiment: str):
             ]
 
             best_epoch = int(best_row.at['csv-epoch'])
+            print(f'Best epoch for model {model}, with {version}, and size {dataset.size} is {best_epoch}')
 
 
 
@@ -60,9 +60,13 @@ def main(model: str, experiment: str):
             matching_row = new_metrics[new_metrics['csv-epoch'] == int(best_epoch)]
             matching_row = matching_row[matching_row['csv-accuracy/validator'].notna()]
             print('--- Matching Row ---')
-            print(f"current model {model}, with {version}, and size {dataset.size}, matching validator{matching_row['csv-accuracy/validator'].values[0]}, matching exact {matching_row['csv-accuracy/exact'].values[0]}")
+            if matching_row.empty:
+                print(f'No matching row found for model {model}, version {version}, size {dataset.size} at epoch {best_epoch}')
+                continue
+            print(f"current model {model}, with {version}, and size {dataset.size}, matching validator{matching_row['csv-accuracy/validator'].values[0]}, matching exact {matching_row['csv-accuracy/exact'].values[0]}\n\n----------------\n")
 
             matching_df = pd.concat([matching_df, matching_row])
+
 
 
 
@@ -77,7 +81,8 @@ def main(model: str, experiment: str):
     }).reset_index()
 
     # print the results in latex table format
-    for size, row in grouped.iterrows():
+    for _, row in grouped.iterrows():
+        size = int(row['size'].values[0])
         validator_mean = row[('csv-accuracy/validator', 'mean')]
         validator_std = row[('csv-accuracy/validator', 'std')]
         exact_mean = row[('csv-accuracy/exact', 'mean')]
