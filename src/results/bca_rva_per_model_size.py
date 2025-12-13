@@ -44,15 +44,23 @@ def main(model: str, experiment: str):
                 print(f'new metrics size: {new_metrics.size}')
                 print(f'new metrics version: {new_metrics.version}')
             #! error is here.
-            checkpoint_files = os.listdir(f"{finetuner_model.experiment_instance_result_path}/checkpoints/")
-            best_checkpoints = [file for file in checkpoint_files if file.startswith('best-')][0]
-            best_checkpoints = [file for file in checkpoint_files][0]
-            best_epoch = best_checkpoints.split('-')[1].split('.')[0]
+            # checkpoint_files = os.listdir(f"{finetuner_model.experiment_instance_result_path}/checkpoints/")
+            # best_checkpoints = [file for file in checkpoint_files if file.startswith('best-')][0]
+            # best_checkpoints = [file for file in checkpoint_files][0]
+            # best_epoch = best_checkpoints.split('-')[1].split('.')[0]
+            best_row = new_metrics.loc[
+                new_metrics['csv-val_loss_epoch'].idxmin()
+            ]
+
+            best_epoch = int(best_row.at['csv-epoch'])
+
+
 
 
             matching_row = new_metrics[new_metrics['csv-epoch'] == int(best_epoch)]
             matching_row = matching_row[matching_row['csv-accuracy/validator'].notna()]
-            print(model, version, dataset.size, matching_row['csv-accuracy/validator'].values[0], matching_row['csv-accuracy/exact'].values[0])
+            print('--- Matching Row ---')
+            print(f"current model {model}, with {version}, and size {dataset.size}, matching validator{matching_row['csv-accuracy/validator'].values[0]}, matching exact {matching_row['csv-accuracy/exact'].values[0]}")
 
             matching_df = pd.concat([matching_df, matching_row])
 
@@ -61,12 +69,14 @@ def main(model: str, experiment: str):
         pd.set_option('display.max_rows', None)
         # print(matching_df)
 
+    # group them by size and calculate mean and std
     grouped = matching_df.groupby(['size']).agg({
         'csv-accuracy/validator': ['mean', 'std'],
         'csv-accuracy/exact': ['mean', 'std'],
         'csv-epoch': ['mean', 'std'],
     }).reset_index()
 
+    # print the results in latex table format
     for size, row in grouped.iterrows():
         validator_mean = row[('csv-accuracy/validator', 'mean')]
         validator_std = row[('csv-accuracy/validator', 'std')]
