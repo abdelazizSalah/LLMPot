@@ -55,7 +55,7 @@ def main(model: str, experiment: str):
             print(f'Best epoch for model {model}, with {version}, and size {dataset.size} is {best_epoch}')
 
 
-
+            # Now the goal is to try to get other results
 
             matching_row = new_metrics[new_metrics['csv-epoch'] == int(best_epoch)]
             matching_row = matching_row[matching_row['csv-accuracy/validator'].notna()]
