@@ -16,7 +16,7 @@ def main(model: str, experiment: str):
 
         versions = os.listdir(finetuner_model.experiment_dataset_result_path)
         versions = [folder for folder in versions if not folder == 'csv']
-
+        print("Found versions:", versions)
         for version in versions:
             finetuner_model.start_datetime = version
             with open(f"{finetuner_model.experiment_csv_metrics_path}") as metrics:
