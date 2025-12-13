@@ -44,8 +44,8 @@ def main(model: str, experiment: str):
                 print(f'new metrics size: {new_metrics.size}')
             #! error is here.
             # checkpoint_files = os.listdir(f"{finetuner_model.experiment_instance_result_path}/checkpoints/")
-            # best_checkpoints = [file for file in checkpoint_files if file.startswith('best-')][0]
-            # best_checkpoints = [file for file in checkpoint_files][0]
+            # best_checkpoints = [file for file in checkpoint_files if file.startswith('best-')][0] #! There are no folder called checkpoints here, so I modified the logic to get
+            # best_checkpoints = [file for file in checkpoint_files][0]                             #! To get the best row from the existing metrics csv file.
             # best_epoch = best_checkpoints.split('-')[1].split('.')[0]
             best_row = new_metrics.loc[
                 new_metrics['csv-val_loss_epoch'].idxmin()
@@ -60,6 +60,7 @@ def main(model: str, experiment: str):
             matching_row = new_metrics[new_metrics['csv-epoch'] == int(best_epoch)]
             matching_row = matching_row[matching_row['csv-accuracy/validator'].notna()]
             print('--- Matching Row ---')
+            #! With no validation, there might be no matching row, and it will cause error, so I added this check.
             if matching_row.empty:
                 print(f'No matching row found for model {model}, version {version}, size {dataset.size} at epoch {best_epoch}')
                 continue
