@@ -13,7 +13,7 @@ from src.utilities.utils import load_cfg
 
 
 def main(model: str, experiment: str):
-    # Loading the finetuner model with the specified model and experiment configuration
+    ## Loading the finetuner model with the specified model and experiment configuration
     finetuner_model = load_cfg(model, experiment)
 
     print("model, size, accuracy/validator, accuracy/exact")
