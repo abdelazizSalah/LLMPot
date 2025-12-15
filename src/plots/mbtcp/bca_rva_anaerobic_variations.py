@@ -1,4 +1,4 @@
-from plots.from_csv import NATURE, Plots
+from src.plots.from_csv import NATURE, Plots
 
 
 plot = Plots("mbtcp-anaerobic-variations.json", "20240428T2317")
