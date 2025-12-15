@@ -98,7 +98,7 @@ class Plots:
             Generates bar plots for BCA and RVA metrics using test datasets with different (same vs different) PLC configurations.
             Fig 7 in the paper.
         '''
-
+        print('generating accuracy with random dataset plot...')
         # create empty dataframe
         dfs = pd.DataFrame()
 
