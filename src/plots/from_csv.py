@@ -258,6 +258,9 @@ class Plots:
             fig.write_image(f"{ASSETS}/{self._finetuner.experiment}/{validation_type}.pdf")
 
     def loss_per_epoch(self, colors: dict, labels: List, log_y_axis: bool = True):
+        '''
+            Fig 8 in the paper.
+        '''
         dfs = pd.DataFrame()
         for dataset in self._finetuner.datasets:
             self._finetuner.current_dataset = dataset

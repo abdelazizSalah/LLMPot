@@ -1,4 +1,4 @@
-from plots.from_csv import NATURE, Plots
+from src.plots.from_csv import NATURE, Plots
 
 
 plot = Plots("mbtcp-diff-functions.json", "20240610T1639")
