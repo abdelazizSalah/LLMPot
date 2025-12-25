@@ -11,3 +11,5 @@ ENV/
 nohup.out
 outputs/logs
 outputs/datasets/dumps
+Modbus_dataset/
+outputs/datasets/parsed_custom

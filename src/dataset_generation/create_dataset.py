@@ -16,9 +16,12 @@ from src.finetune.model.finetuner_model import FinetunerModel
 
 
 def parse_packets(port: int, protocol: str, context_length: int, output_filename: str, experiment: str):
+    # This is the function responsible for parsing the packets captured in temp.pcap #! which we can change the file name and make it our own pcap files.
+
     if protocol == "s7comm":
         parse_with_file(protocol, "tpkt", port, "temp", output_filename, context_length, False, experiment)
     else:
+
         parse_with_file(protocol, protocol, port, "temp", output_filename, context_length, False, experiment)
     split(output_filename, experiment)
 
@@ -65,7 +68,7 @@ async def main(port: int, interface: str, model: str, experiment: str, overwrite
                 # then later we can instantiate it like server_class(ip, port, *args)
                 server_class = getattr(importlib.import_module(f"src.dataset_generation.{finetuner_model.current_dataset.protocol}.{finetuner_model.current_dataset.server.name}"), server_class_str)
                 client_class = getattr(importlib.import_module(f"src.dataset_generation.{finetuner_model.current_dataset.protocol}.{finetuner_model.current_dataset.client}"), client_class_str)
-    
+
             # open tcpdump to capture packets on the given interface and write to temp.pcap which most probably will be deleted later
             tcpdump_process = subprocess.Popen(["tcpdump", "-i", interface, "-w", f"{DATASET_DUMPS}/temp.pcap"])
 
