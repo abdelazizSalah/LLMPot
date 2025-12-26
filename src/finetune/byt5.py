@@ -37,6 +37,8 @@ class Byt5(Finetuner):
                                                   test_dataset=dataset["test"])
 
     def _load_dataset(self) -> Dataset:
+        # print train path
+        print(f"Loading train dataset from: {DATASET_TRAIN}/{self._finetuner_model.experiment}/{self._finetuner_model.current_dataset}.csv")
         dataset = load_dataset('csv', data_files={
             'train': f"{DATASET_TRAIN}/{self._finetuner_model.experiment}/{self._finetuner_model.current_dataset}.csv",
             'val': f"{DATASET_VAL}/{self._finetuner_model.experiment}/{self._finetuner_model.current_dataset}.csv",
