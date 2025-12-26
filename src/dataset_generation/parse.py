@@ -138,7 +138,7 @@ def __parse(protocol: str, port: int, cap, csv_filename: str, context_length: in
 
     # iterates packets and collect requests and responses
     print('Iterating over packets...')
-    max_iter = 100000
+    max_iter = 1000 # read it from cmd later
     for index, packet in tqdm(enumerate(cap)):
         if index >= max_iter:
             print(f"Reached max iteration limit of {max_iter}. Stopping parse.")

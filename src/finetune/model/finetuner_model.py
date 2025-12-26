@@ -34,6 +34,7 @@ class TestExperiment:
 
 
 # This class is central configuration object for everything related to training
+#? usage for my case: python ./src/finetune/multi-trainer.py -p 200:1,400:1,800:1,1600:1,3200:1,6400:1 -model byt5-small -cfg s7comm-protocol-emulation.json
 class FinetunerModel:
 
     model_type: str # for example google module
@@ -57,7 +58,7 @@ class FinetunerModel:
     target_max_token_len = 512
     source_max_token_len = 512
     precision: _PRECISION_INPUT = "32"
-    workers: int = 2
+    workers: int = 2 # I think this should increase to speed up data loading
 
     start_time: float
     start_datetime: str
@@ -184,7 +185,7 @@ class FinetunerModel:
         os.makedirs(os.path.dirname(path), exist_ok=True)
         return path
 
-    @property 
+    @property
     def experiment_model_result_path(self):
         return f"{CHECKPOINTS}/{self.model_name}"
 
