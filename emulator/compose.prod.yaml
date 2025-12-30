@@ -1,27 +1,39 @@
-services:
+version: "3.8"
 
+services:
   mongo:
+    build:
+      context: ../docker
+      dockerfile: mongo.Dockerfile
+    container_name: llmpot-mongo
     volumes:
-      - /home/chris/mongo:/data/db
+      - ./data/mongo:/data/db
     command: --quiet
+    restart: unless-stopped
 
   web_app:
+    build:
+      context: ..
+      dockerfile: emulator/web.Dockerfile
+    container_name: llmpot-web
     volumes:
-      - /home/chris/logs/web:/app/logs
-    deploy:
-      resources:
-        limits:
-          memory: 8G
+      - ./logs/web:/app/logs
+    ports:
+      - "8080:80"
+      - "8443:443"
+    depends_on:
+      - mongo
+    restart: unless-stopped
 
   modbus_app:
+    build:
+      context: ..
+      dockerfile: emulator/modbus.Dockerfile
+    container_name: llmpot-modbus
     volumes:
-      - /home/chris/logs/modbus:/app/logs
-    deploy:
-      resources:
-        limits:
-          memory: 8G
-        reservations:
-          devices:
-            - driver: nvidia
-              count: 1
-              capabilities: [ gpu ]
+      - ./logs/modbus:/app/logs
+    ports:
+      - "1502:502"
+    depends_on:
+      - mongo
+    restart: unless-stopped

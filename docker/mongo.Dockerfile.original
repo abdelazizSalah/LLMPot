@@ -1,6 +1,7 @@
 FROM mongo:latest
 
 RUN mkdir -p /dump
+
 COPY ./dump /dump
 
-CMD ["mongod"]
+RUN mongorestore /dump && mongod
