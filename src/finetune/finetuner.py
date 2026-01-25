@@ -90,6 +90,7 @@ class Finetuner:
 
             callbacks.append(early_stop_callback)
 
+        print(f'self._finetuner_model.devices: {self._finetuner_model.devices}')
         self._trainer = Trainer(logger=loggers,
                             callbacks=callbacks,
                             max_epochs=self._finetuner_model.max_epochs,
@@ -97,6 +98,8 @@ class Finetuner:
                             log_every_n_steps=1,
                             # accumulate_grad_batches=8,
                             accelerator=self._finetuner_model.accelerator,
+                            # devices=self._finetuner_model.devices,
+                            # use GPU 0 if available,
                             devices=self._finetuner_model.devices,
                             strategy=self._finetuner_model.strategy,
                             )
