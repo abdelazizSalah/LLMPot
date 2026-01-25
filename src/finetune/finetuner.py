@@ -98,9 +98,9 @@ class Finetuner:
                             log_every_n_steps=1,
                             # accumulate_grad_batches=8,
                             accelerator=self._finetuner_model.accelerator,
-                            # devices=self._finetuner_model.devices,
+                            devices=self._finetuner_model.devices,
                             # use GPU 0 if available,
-                            devices=0, #! I changed this because GPU 1 is busy
+                            # devices=0, #! I changed this because GPU 1 is busy
                             strategy=self._finetuner_model.strategy,
                             )
         self._trainer.fit(self._custom_module, self._data_module)
