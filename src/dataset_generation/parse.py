@@ -45,7 +45,7 @@ SOURCE_TEXT = "source_text"
 TARGET_TEXT = "target_text"
 
 
-def parse_with_file(protocol: str, capture_layer: str, port: int, pcap: str, csv: str, context_length: int, has_time: bool, experiment: str):
+def parse_with_file(protocol: str, capture_layer: str, port: int, pcap: str, csv: str, context_length: int, has_time: bool, experiment: str, max_iter: int = 10000):
     '''
         This function parses a pcap file given the protocol, port, and other parameters.
         Input:
@@ -91,14 +91,14 @@ def parse_with_file(protocol: str, capture_layer: str, port: int, pcap: str, csv
                               decode_as={f'tcp.port=={port}': f'{capture_layer}'})
 
     # calls the real parsing function
-    __parse(protocol, port, cap, csv, context_length, has_time, experiment)
+    __parse(protocol, port, cap, csv, context_length, has_time, experiment, max_iter=max_iter)
 
 
 def parse_without_file(protocol: str, port: int, cap, csv_filename: str, context_length: int, has_time: bool, experiment: str):
     __parse(protocol, port, cap, csv_filename, context_length, has_time, experiment)
 
 
-def __parse(protocol: str, port: int, cap, csv_filename: str, context_length: int, has_time: bool, experiment: str):
+def __parse(protocol: str, port: int, cap, csv_filename: str, context_length: int, has_time: bool, experiment: str, max_iter: int = 10000):
     '''
         This is the core function that does the parsing of packets from the given capture object.
     Input:
@@ -138,7 +138,7 @@ def __parse(protocol: str, port: int, cap, csv_filename: str, context_length: in
 
     # iterates packets and collect requests and responses
     print('Iterating over packets...')
-    max_iter = 10000 #! read it from cmd later
+    # max_iter = 10000 #! read it from cmd later
     print(f"Max iterations set to: {max_iter}")
     for index, packet in tqdm(enumerate(cap)):
         if index >= max_iter:
@@ -234,7 +234,7 @@ def __parse(protocol: str, port: int, cap, csv_filename: str, context_length: in
     os.makedirs(f"{DATASET_PARSED_Custom}/{experiment}", exist_ok=True)
 
     # Write to CSV with context length or time if specified
-    print('Writing to CSV...')
+    print(f'Writing to CSV... {DATASET_PARSED_Custom}/{experiment}/{csv_filename}.csv')
     if context_length > 0:
         # Write CSV with context length
         with open(f"{DATASET_PARSED_Custom}/{experiment}/{csv_filename}.csv", "w") as csv_context:
@@ -261,9 +261,9 @@ def main():
     '''
         This is the function that I was looking for, which allows me directly parse pcap files.
         Usage example:
-            -  python -m src.dataset_generation.parse -pcap attack_1 -csv wdt_attack_1 -p 502 -layer mbtcp -pr mbtcp -clen 1 -exp wdt_custom_attack_1
+            -  python -m src.dataset_generation.parse -pcap attack_1 -csv wdt_attack_1 -p 502 -layer mbtcp -pr mbtcp -clen 1 -exp wdt_custom_attack_1 -max_iter 1000
                 - has_time: False
-            -  python -m src.dataset_generation.parse -pcap attack_1 -csv wdt_attack_1 -p 502 -layer mbtcp -pr mbtcp -clen 1 -exp wdt_custom_attack_1 -t
+            -  python -m src.dataset_generation.parse -pcap attack_1 -csv wdt_attack_1 -p 502 -layer mbtcp -pr mbtcp -clen 1 -exp wdt_custom_attack_1 -max_iter 1000 -t
                 - has_time: True
     '''
     parser = argparse.ArgumentParser()
@@ -275,6 +275,7 @@ def main():
     parser.add_argument('-clen', default=0, type= int, required=False) # context length
     parser.add_argument('-t', action="store_true", required=False) # whether to include time
     parser.add_argument('-exp', default="mbtcp-testbed.json", required=False) # experiment name
+    parser.add_argument('-max_iter', default=10000, type=int, required=False) # maximum iterations
     args = parser.parse_args()
 
 
@@ -286,13 +287,13 @@ def main():
     context_length = args.clen
     has_time = args.t
     experiment = args.exp
-
+    max_iter = args.max_iter
     print(f"has_time: {has_time}")
 
     if has_time and context_length > 0:
         raise ValueError("Cannot have time and context length at the same time")
 
-    parse_with_file(protocol, capture_layer, port, pcap, csv, context_length, has_time, experiment)
+    parse_with_file(protocol, capture_layer, port, pcap, csv, context_length, has_time, experiment, max_iter=max_iter)
 
 
 if __name__ == '__main__':

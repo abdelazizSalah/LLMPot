@@ -1,3 +1,10 @@
+'''
+@Reviewer: Abdelaziz Neamatallah
+@Date: 30.12.25
+@Description; Trying to understand how to load a finetuned ByT5 model for inference.
+'''
+
+
 import argparse
 import datetime
 import json
@@ -11,15 +18,23 @@ from src.finetune.custom_lightning.byt5_lightning_module import Byt5LightningMod
 from src.finetune.model.finetuner_model import FinetunerModel
 
 
+
 class Inference:
 
     def __init__(self, finetune_model: FinetunerModel):
+        '''
+            This is the constructor of the Inference class.
+            It initializes the tokenizer and model based on the finetune_model provided.
+            if model_type is meta-llama, it loads the LlamaTokenizerFast and AutoModelForCausalLM.
+            Otherwise, it loads the ByT5Tokenizer and T5ForConditionalGeneration.
+
+        '''
         if finetune_model.model_type == "meta-llama":
             self._tokenizer: LlamaTokenizerFast = AutoTokenizer.from_pretrained(finetune_model.base_model_id(), padding_side="left", add_eos_token=False, add_bos_token=False)
             self._tokenizer.pad_token = self._tokenizer.eos_token
             self._model = AutoModelForCausalLM.from_pretrained(f"{finetune_model.experiment_instance_last_result_path}", device_map="cuda")
         else:
-            self._tokenizer =
+            self._tokenizer = ByT5Tokenizer.from_pretrained(finetune_model.base_model_id())  #! Their repo is uploaded to github with this error, they do not define the tokenizer here, and I added it.
             model = Byt5LightningModule(tokenizer=ByT5Tokenizer.from_pretrained(finetune_model.base_model_id()),
                                         model=ByT5ForConditionalGeneration.from_pretrained(finetune_model.base_model_id()),
                                         config=ByT5Config.from_pretrained(finetune_model.base_model_id()))
