@@ -100,7 +100,7 @@ class Finetuner:
                             accelerator=self._finetuner_model.accelerator,
                             # devices=self._finetuner_model.devices,
                             # use GPU 0 if available,
-                            devices=self._finetuner_model.devices,
+                            devices=0, #! I changed this because GPU 1 is busy
                             strategy=self._finetuner_model.strategy,
                             )
         self._trainer.fit(self._custom_module, self._data_module)
