@@ -1,4 +1,4 @@
-from plots.from_csv import NATURE, Plots
+from src.plots.from_csv import NATURE, Plots
 
 
 plot = Plots("wdt-dataset-mbtcp-protocol-emulation-attack1-5000.json", "20260125T1425")
