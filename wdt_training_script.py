@@ -48,6 +48,75 @@ EXPERIMENTS_BYT5_DIR = LLMPOT_ROOT / "experiments" / "byt5-small"
 
 CONDA_ENV_NAME = "llmpot"
 
+import time
+
+def run_cmd_capture(cmd: list[str], cwd: Path | None = None) -> str:
+    """Run command and return combined stdout/stderr (also prints live)."""
+    print(f"\n[RUN] {' '.join(cmd)}")
+    proc = subprocess.Popen(
+        cmd,
+        cwd=str(cwd) if cwd else None,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        text=True,
+        bufsize=1,
+        universal_newlines=True,
+    )
+    assert proc.stdout is not None
+    out_lines = []
+    for line in proc.stdout:
+        print(line, end="")
+        out_lines.append(line)
+    rc = proc.wait()
+    if rc != 0:
+        raise subprocess.CalledProcessError(rc, cmd, output="".join(out_lines))
+    return "".join(out_lines)
+
+
+def find_latest_run_id(checkpoints_dir: Path) -> str:
+    """
+    Find the run folder name like YYYYMMDDThhmm... inside checkpoints_dir.
+    Returns the newest by filesystem mtime.
+    """
+    if not checkpoints_dir.exists():
+        raise FileNotFoundError(f"Checkpoints dir not found: {checkpoints_dir}")
+
+    candidates = [p for p in checkpoints_dir.iterdir() if p.is_dir() and re.match(r"^\d{8}T\d{4}", p.name)]
+    if not candidates:
+        # show debug listing
+        kids = [p.name for p in checkpoints_dir.iterdir()]
+        raise FileNotFoundError(
+            f"No run-id folders (YYYYMMDDThhmm) found under: {checkpoints_dir}\n"
+            f"Found: {kids}"
+        )
+
+    latest = max(candidates, key=lambda p: p.stat().st_mtime)
+    return latest.name
+
+
+def create_plot_script(exp_name: str, run_id: str, plots_dir: Path) -> Path:
+    """
+    Create src/plots/mbtcp/bca_rva_wdt_<experiment_name>.py with the template.
+    """
+    ensure_dir(plots_dir)
+    # make a safe python module name (hyphens not allowed)
+    safe_exp = re.sub(r"[^0-9a-zA-Z_]", "_", exp_name)
+    script_name = f"bca_rva_wdt_{safe_exp}.py"
+    script_path = plots_dir / script_name
+
+    content = f"""from src.plots.from_csv import NATURE, Plots
+
+    plot = Plots("{exp_name}", "{run_id}")
+    colors = {{dataset.functions_str(): NATURE[i] for i, dataset in enumerate(plot.finetuner.datasets)}}
+    labels = [dataset.functions_str() for dataset in plot.finetuner.datasets]
+    plot.accuracy_per_epoch(colors, labels)
+    plot.loss_per_epoch(colors, labels)
+    """
+    script_path.write_text(content, encoding="utf-8")
+    print(f"[PLOT] wrote: {script_path}")
+    return script_path
+
+
 
 def run_cmd(cmd: List[str], cwd: Path | None = None) -> None:
     """Run a command, streaming output; raise on error."""
@@ -296,6 +365,65 @@ def main() -> None:
         summary_vals=summary_vals,
         out_path=out_json_path,
     )
+
+
+        # ---------------------------
+    # 10) Fine-tune (multi_trainer)
+    # ---------------------------
+    # NOTE: command you requested had typos; using corrected module path: src.finetune.multi_trainer
+    cfg_path = EXPERIMENTS_BYT5_DIR / f"{exp_name}.json"
+    if not cfg_path.exists():
+        raise FileNotFoundError(f"Config JSON not found: {cfg_path}")
+
+    # Fine-tune
+    run_cmd(
+        [
+            "conda", "run", "-n", CONDA_ENV_NAME,
+            "python", "-u", "-m", "src.finetune.multi_trainer",
+            "-p", f"{args.max_iteration}:1",
+            "-model", "byt5-small",
+            "-cfg", str(cfg_path),
+        ],
+        cwd=LLMPOT_ROOT,
+    )
+
+    # ---------------------------
+    # 11) Compute results (BCA/RVA)
+    # ---------------------------
+    run_cmd(
+        [
+            "conda", "run", "-n", CONDA_ENV_NAME,
+            "python", "-u", "-m", "src.results.bca_rva_per_model_size",
+            "-model", "byt5-small",
+            "-cfg", str(cfg_path),
+        ],
+        cwd=LLMPOT_ROOT,
+    )
+
+    # ---------------------------
+    # 12) Discover checkpoint run id
+    # ---------------------------
+    ckpt_root = LLMPOT_ROOT / "checkpoints" / "byt5-small" / exp_name
+    run_id = find_latest_run_id(ckpt_root)
+    print(f"[CKPT] latest run id: {run_id}")
+
+    # ---------------------------
+    # 13) Generate plot script + run it
+    # ---------------------------
+    plots_dir = LLMPOT_ROOT / "src" / "plots" / "mbtcp"
+    plot_script = create_plot_script(exp_name, run_id, plots_dir)
+
+    # Run as module: src.plots.mbtcp.<module_name_without_py>
+    module_name = plot_script.stem  # bca_rva_wdt_<safe_exp>
+    run_cmd(
+        [
+            "conda", "run", "-n", CONDA_ENV_NAME,
+            "python", "-u", "-m", f"src.plots.mbtcp.{module_name}",
+        ],
+        cwd=LLMPOT_ROOT,
+    )
+
+
 
     print("\n[DONE] Pipeline finished successfully.")
 
