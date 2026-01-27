@@ -140,9 +140,9 @@ def move_split_files(parsed_exp_dir: Path, exp_name: str) -> Tuple[int, int, int
       *test.csv  -> outputs/datasets/test/<exp_name>/
     Returns counts moved.
     """
-    train_dest = TRAIN_DIR / exp_name
-    val_dest = VAL_DIR / exp_name
-    test_dest = TEST_DIR / exp_name
+    train_dest = TRAIN_DIR / f"{exp_name}.json"
+    val_dest = VAL_DIR / f"{exp_name}.json"
+    test_dest = TEST_DIR / f"{exp_name}.json"
 
     for d in (train_dest, val_dest, test_dest):
         ensure_dir(d)
@@ -271,6 +271,43 @@ def resolve_pcap_path(pcap_arg: str) :
         f"Pass a full path, or put the file in outputs/datasets/dumps/"
     )
 
+def build_dataset_base_name(protocol: str, client: str, context_len: int, max_iter: int, summary_vals: dict) -> str:
+    # f{function_codes_separated_by_underscores}
+    fcodes = "_".join(str(x) for x in summary_vals["function_codes"])
+
+    # v{min_value-max_value}  (your example uses underscore OR dash? you wrote min_value-max_value, example uses v0_5)
+    # I’ll follow your EXAMPLE exactly: v{low}_{high}
+    v_part = f'v{summary_vals["min_value"]}_{summary_vals["max_value"]}'
+
+    # a{min_address-max_address} (example uses a1_5)
+    a_part = f'a{summary_vals["min_address"]}_{summary_vals["max_address"]}'
+
+    # sc{coils}-sr{registers} (example uses sc26-sr5)
+    sc = summary_vals["sc"]
+    sr = summary_vals["sr"]
+
+    return f"{protocol}-{client}-c{context_len}-s{max_iter}-f{fcodes}-{v_part}-{a_part}-sc{sc}-sr{sr}.csv"
+
+def rename_split_files_in_dest(exp_name: str, old_base: str, new_base: str) -> None:
+    """
+    After move, rename:
+      train/<exp>/<old_base>_train.csv -> train/<exp>/<new_base>_train.csv
+      validation/<exp>/<old_base>_val.csv -> validation/<exp>/<new_base>_val.csv
+      test/<exp>/<old_base>_test.csv -> test/<exp>/<new_base>_test.csv
+    """
+    mapping = [
+        (TRAIN_DIR / f"{exp_name}.json" / f"{old_base}_train.csv", TRAIN_DIR / f"{exp_name}.json" / f"{new_base}_train.csv"),
+        (VAL_DIR / f"{exp_name}.json" / f"{old_base}_val.csv", VAL_DIR / f"{exp_name}.json" / f"{new_base}_val.csv"),
+        (TEST_DIR / f"{exp_name}.json" / f"{old_base}_test.csv", TEST_DIR / f"{exp_name}.json" / f"{new_base}_test.csv"),
+    ]
+
+    for src, dst in mapping:
+        if not src.exists():
+            raise FileNotFoundError(f"Expected file not found for renaming: {src}")
+        print(f"[RENAME] {src.name} -> {dst.name}")
+        src.rename(dst)
+
+
 
 def main() -> None:
     r'''
@@ -359,6 +396,21 @@ def main() -> None:
 
     summary_vals = parse_modbus_summary(summary_path)
     print(f"[SUMMARY] {summary_vals}")
+    # Build new dataset base name and rename split CSVs accordingly
+    # old_base is what you passed via --csv
+    old_base = out_csv_name  # e.g. wdt_attack_1_c0_5000
+    new_base = build_dataset_base_name(
+        protocol="mbtcp",
+        client="client",
+        context_len=context_len,
+        max_iter=max_iter,
+        summary_vals=summary_vals,
+    )
+
+    print(f"[NAME] dataset base will be: {new_base}")
+    rename_split_files_in_dest(exp_name, old_base, new_base)
+
+
 
     # 8-9) Create JSON experiment file with extracted values
     out_json_path = EXPERIMENTS_BYT5_DIR / f"{exp_name}.json"
@@ -369,64 +421,6 @@ def main() -> None:
         summary_vals=summary_vals,
         out_path=out_json_path,
     )
-
-
-        # ---------------------------
-    # 10) Fine-tune (multi_trainer)
-    # ---------------------------
-    # NOTE: command you requested had typos; using corrected module path: src.finetune.multi_trainer
-    cfg_path = EXPERIMENTS_BYT5_DIR / f"{exp_name}.json"
-    if not cfg_path.exists():
-        raise FileNotFoundError(f"Config JSON not found: {cfg_path}")
-
-    # Fine-tune
-    run_cmd(
-        [
-            "conda", "run", "-n", CONDA_ENV_NAME,
-            "python", "-u", "-m", "src.finetune.multi_trainer",
-            "-p", f"{args.max_iteration}:1",
-            "-model", "byt5-small",
-            "-cfg", str(cfg_path),
-        ],
-        cwd=LLMPOT_ROOT,
-    )
-
-    # ---------------------------
-    # 11) Compute results (BCA/RVA)
-    # ---------------------------
-    run_cmd(
-        [
-            "conda", "run", "-n", CONDA_ENV_NAME,
-            "python", "-u", "-m", "src.results.bca_rva_per_model_size",
-            "-model", "byt5-small",
-            "-cfg", str(cfg_path),
-        ],
-        cwd=LLMPOT_ROOT,
-    )
-
-    # ---------------------------
-    # 12) Discover checkpoint run id
-    # ---------------------------
-    ckpt_root = LLMPOT_ROOT / "checkpoints" / "byt5-small" / exp_name
-    run_id = find_latest_run_id(ckpt_root)
-    print(f"[CKPT] latest run id: {run_id}")
-
-    # ---------------------------
-    # 13) Generate plot script + run it
-    # ---------------------------
-    plots_dir = LLMPOT_ROOT / "src" / "plots" / "mbtcp"
-    plot_script = create_plot_script(exp_name, run_id, plots_dir)
-
-    # Run as module: src.plots.mbtcp.<module_name_without_py>
-    module_name = plot_script.stem  # bca_rva_wdt_<safe_exp>
-    run_cmd(
-        [
-            "conda", "run", "-n", CONDA_ENV_NAME,
-            "python", "-u", "-m", f"src.plots.mbtcp.{module_name}",
-        ],
-        cwd=LLMPOT_ROOT,
-    )
-
 
 
     print("\n[DONE] Pipeline finished successfully.")
