@@ -38,7 +38,7 @@ from typing import List, Tuple
 
 # get the current working directory
 curr_dir = Path.cwd()
-LLMPOT_ROOT = Path(r"{curr_dir}")
+LLMPOT_ROOT = Path(f"{curr_dir}")
 OUTPUTS_DIR = LLMPOT_ROOT / "outputs" / "datasets"
 PARSED_CUSTOM_DIR = OUTPUTS_DIR / "parsed_custom"
 TRAIN_DIR = OUTPUTS_DIR / "train"
