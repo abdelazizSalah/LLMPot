@@ -1,0 +1,304 @@
+#!/usr/bin/env python3
+r"""
+LLMPot WDT pipeline automation (Windows paths).
+
+What it does:
+1) Accept: pcap filename, output csv name, context length, experiment_folder_name, max_iteration
+2) Run parse step in conda env "llmpot"
+3) Create experiment folders in outputs/datasets/{train,validation,test}/<experiment_name>
+4) Move parsed CSV splits from parsed_custom/<experiment_name>/ to those folders
+5) Run WDT main_Configuration_extractor.py in the WDT pcap directory
+6) Read the generated *_modbus_summary.txt and extract Modbus summary fields
+7) Create experiments/byt5-small/<experiment_name>.json with those extracted fields
+
+Usage example (PowerShell):
+python .\run_llmpot_wdt_pipeline.py `
+  --pcap "E:\GitHub\LLMPot\Modbus_dataset\WDT\WDT\Network_dataset\pcap\capture.pcap" `
+  --out-csv "mbtcp-client-c0-s10000.csv" `
+  --context-len 512 `
+  --experiment-name "wdt-dataset-mbtcp-protocol-emulation-attack1-c0-10000" `
+  --max-iteration 10000
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import re
+import shutil
+import subprocess
+from pathlib import Path
+from typing import List, Tuple
+
+
+# ---------------------------
+# Config: adjust if your repo layout differs
+# ---------------------------
+LLMPOT_ROOT = Path(r"E:\GitHub\LLMPot")
+OUTPUTS_DIR = LLMPOT_ROOT / "outputs" / "datasets"
+PARSED_CUSTOM_DIR = OUTPUTS_DIR / "parsed_custom"
+TRAIN_DIR = OUTPUTS_DIR / "train"
+VAL_DIR = OUTPUTS_DIR / "validation"
+TEST_DIR = OUTPUTS_DIR / "test"
+
+WDT_PCAP_DIR = LLMPOT_ROOT / "Modbus_dataset" / "WDT" / "WDT" / "Network_dataset" / "pcap"
+CONFIG_EXTRACTOR = WDT_PCAP_DIR / "main_Configuration_extractor.py"
+
+EXPERIMENTS_BYT5_DIR = LLMPOT_ROOT / "experiments" / "byt5-small"
+
+CONDA_ENV_NAME = "llmpot"
+
+
+def run_cmd(cmd: List[str], cwd: Path | None = None) -> None:
+    """Run a command, streaming output; raise on error."""
+    print(f"\n[RUN] {' '.join(cmd)}")
+    subprocess.run(cmd, cwd=str(cwd) if cwd else None, check=True)
+
+
+def ensure_dir(p: Path) -> None:
+    p.mkdir(parents=True, exist_ok=True)
+
+
+def move_split_files(parsed_exp_dir: Path, exp_name: str) -> Tuple[int, int, int]:
+    """
+    Move:
+      *train.csv -> outputs/datasets/train/<exp_name>/
+      *val.csv   -> outputs/datasets/validation/<exp_name>/
+      *test.csv  -> outputs/datasets/test/<exp_name>/
+    Returns counts moved.
+    """
+    train_dest = TRAIN_DIR / exp_name
+    val_dest = VAL_DIR / exp_name
+    test_dest = TEST_DIR / exp_name
+
+    for d in (train_dest, val_dest, test_dest):
+        ensure_dir(d)
+
+    train_files = list(parsed_exp_dir.glob("*train.csv"))
+    val_files = list(parsed_exp_dir.glob("*val.csv"))
+    test_files = list(parsed_exp_dir.glob("*test.csv"))
+
+    def _move(files: List[Path], dest: Path) -> int:
+        n = 0
+        for f in files:
+            target = dest / f.name
+            print(f"[MOVE] {f} -> {target}")
+            shutil.move(str(f), str(target))
+            n += 1
+        return n
+
+    return _move(train_files, train_dest), _move(val_files, val_dest), _move(test_files, test_dest)
+
+
+def parse_modbus_summary(summary_path: Path) -> dict:
+    """
+    Extracts from the section:
+    === MODBUS/TCP PCAP SUMMARY ===
+    function_codes: [1, 3, 5, 6]
+    min_value: 0
+    max_value: 24
+    min_address: 1
+    max_address: 49
+    sc: 26
+    sr: 5
+    """
+    text = summary_path.read_text(encoding="utf-8", errors="replace")
+
+    # Grab the MODBUS/TCP SUMMARY section (until next === ... === or EOF)
+    m = re.search(
+        r"===\s*MODBUS/TCP PCAP SUMMARY\s*===\s*(.*?)(?:\n===|\Z)",
+        text,
+        flags=re.DOTALL | re.IGNORECASE,
+    )
+    if not m:
+        raise ValueError(f"Could not find MODBUS/TCP summary section in: {summary_path}")
+
+    block = m.group(1)
+
+    def _get_int(key: str) -> int:
+        mm = re.search(rf"{re.escape(key)}\s*:\s*([0-9]+)\s*$", block, flags=re.MULTILINE)
+        if not mm:
+            raise ValueError(f"Missing '{key}:' in summary block.")
+        return int(mm.group(1))
+
+    fc_m = re.search(r"function_codes\s*:\s*\[([^\]]+)\]", block)
+    if not fc_m:
+        raise ValueError("Missing 'function_codes: [...]' in summary block.")
+    function_codes = [int(x.strip()) for x in fc_m.group(1).split(",") if x.strip()]
+
+    out = {
+        "function_codes": function_codes,
+        "min_value": _get_int("min_value"),
+        "max_value": _get_int("max_value"),
+        "min_address": _get_int("min_address"),
+        "max_address": _get_int("max_address"),
+        "sc": _get_int("sc"),
+        "sr": _get_int("sr"),
+    }
+    return out
+
+
+def write_experiment_json(
+    exp_name: str,
+    context_len: int,
+    size: int,
+    summary_vals: dict,
+    out_path: Path,
+) -> None:
+    payload = {
+        "model_type": "google",
+        "model_name": "byt5-small",
+        "max_epochs": 30,
+        "target_max_token_len": 512,
+        "source_max_token_len": 512,
+        "batch_size": 1,
+        "datasets": [
+            {
+                "protocol": "mbtcp",
+                "size": size,
+                "client": "client",
+                "functions": summary_vals["function_codes"],
+                "values": {"low": summary_vals["min_value"], "high": summary_vals["max_value"]},
+                "addresses": {"low": summary_vals["min_address"], "high": summary_vals["max_address"]},
+                "server": {
+                    "name": "no_logic_server",
+                    "coils": summary_vals["sc"],
+                    "registers": summary_vals["sr"],
+                },
+                "context": context_len,
+            }
+        ],
+    }
+
+    ensure_dir(out_path.parent)
+    out_path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+    print(f"[JSON] wrote: {out_path}")
+
+
+def resolve_pcap_path(pcap_arg: str) -> Path:
+    p = Path(pcap_arg)
+    if p.exists():
+        return p
+
+    # If user passed "attack_1" (no extension), try dumps/<name>.pcap
+    candidate = LLMPOT_ROOT / "outputs" / "datasets" / "dumps" / f"{pcap_arg}.pcap"
+    if candidate.exists():
+        return candidate
+
+    # If user passed "attack_1.pcap" but not a full path, try dumps/<name>
+    candidate2 = LLMPOT_ROOT / "outputs" / "datasets" / "dumps" / p.name
+    if candidate2.exists():
+        return p.name
+
+    raise FileNotFoundError(
+        f"PCAP not found. Tried:\n"
+        f"- {p.resolve()}\n"
+        f"- {candidate}\n"
+        f"- {candidate2}\n"
+        f"Pass a full path, or put the file in outputs/datasets/dumps/"
+    )
+
+
+def main() -> None:
+    r'''
+    Example
+     python .\wdt_training_script.py --pcap attack_1 --csv wdt_attack_1_c1_10000 --p 502  --clen 1 --exp wdt_attack1_c1_10000 --max_iter 10000
+    '''
+
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--pcap", required=True, help="Full path to PCAP file")
+    ap.add_argument("--csv", required=True, help="Output CSV name passed to LLMPot parser")
+    ap.add_argument("--clen", required=True, type=int, help="Context length (clen)")
+    ap.add_argument("--exp", required=True, help="Experiment folder name (exp)")
+    ap.add_argument("--max_iter", required=True, type=int, help="max_iter / max_iteration")
+    ap.add_argument("--p", default="502", help="Modbus/TCP port (default 502)")
+    args = ap.parse_args()
+
+    pcap_path = resolve_pcap_path(args.pcap)
+    print(f"[PCAP] using: {pcap_path}")
+
+
+    exp_name = args.exp
+    out_csv_name = args.csv
+    context_len = args.clen
+    max_iter = args.max_iter
+    port = args.p   # 3) Run LLMPot parser in env (no need for "conda activate")
+    # python -m src.dataset_generation.parse -pcap ... -csv ... -p 502 -layer mbtcp -clen ... -exp ... -max_iter ... -pr mbtcp
+    run_cmd(
+        [
+
+            "python",
+            "-m",
+            "src.dataset_generation.parse",
+            "-pcap",
+            str(args.pcap),
+            "-csv",
+            out_csv_name,
+            "-p",
+            str(port),
+            "-layer",
+            "mbtcp",
+            "-clen",
+            str(context_len),
+            "-exp",
+            exp_name,
+            "-max_iter",
+            str(max_iter),
+            "-pr",
+            "mbtcp",
+        ],
+        cwd=LLMPOT_ROOT,
+    )
+
+    # 4-5) Create folders + move split files
+    parsed_exp_dir = PARSED_CUSTOM_DIR / exp_name
+    if not parsed_exp_dir.exists():
+        raise FileNotFoundError(f"Parsed experiment dir not found: {parsed_exp_dir}")
+
+    n_tr, n_va, n_te = move_split_files(parsed_exp_dir, exp_name)
+    print(f"[OK] moved train={n_tr}, val={n_va}, test={n_te}")
+
+    # 6-7) Run configuration extractor (in WDT pcap directory)
+    if not CONFIG_EXTRACTOR.exists():
+        raise FileNotFoundError(f"Config extractor not found: {CONFIG_EXTRACTOR}")
+
+    # Your command: python ./main_Configuration_extractor.py pcap_file.pcap max_iteration
+    run_cmd(
+        [
+
+            "python",
+            str(CONFIG_EXTRACTOR),
+            str(pcap_path),
+            str(max_iter),
+        ],
+        cwd=WDT_PCAP_DIR,
+    )
+
+    # 9) Read summary txt
+    # expected: {pcap_file_name}_{max_iteration}_modbus_summary.txt
+    # If pcap is ".../capture.pcap", this becomes "capture_10000_modbus_summary.txt"
+    summary_path = WDT_PCAP_DIR / f"{pcap_path.stem}_{max_iter}_modbus_summary.txt"
+    if not summary_path.exists():
+        raise FileNotFoundError(
+            f"Summary file not found: {summary_path}\n"
+            f"Check what main_Configuration_extractor.py actually writes."
+        )
+
+    summary_vals = parse_modbus_summary(summary_path)
+    print(f"[SUMMARY] {summary_vals}")
+
+    # 8-9) Create JSON experiment file with extracted values
+    out_json_path = EXPERIMENTS_BYT5_DIR / f"{exp_name}.json"
+    write_experiment_json(
+        exp_name=exp_name,
+        context_len=context_len,
+        size=args.max_iter,
+        summary_vals=summary_vals,
+        out_path=out_json_path,
+    )
+
+    print("\n[DONE] Pipeline finished successfully.")
+
+
+if __name__ == "__main__":
+    main()
