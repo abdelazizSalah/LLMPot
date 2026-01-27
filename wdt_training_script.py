@@ -24,6 +24,7 @@ from __future__ import annotations
 
 import argparse
 import json
+from locale import currency
 import re
 import shutil
 import subprocess
@@ -34,7 +35,10 @@ from typing import List, Tuple
 # ---------------------------
 # Config: adjust if your repo layout differs
 # ---------------------------
-LLMPOT_ROOT = Path(r"E:\GitHub\LLMPot")
+
+# get the current working directory
+curr_dir = Path.cwd()
+LLMPOT_ROOT = Path(r"{curr_dir}")
 OUTPUTS_DIR = LLMPOT_ROOT / "outputs" / "datasets"
 PARSED_CUSTOM_DIR = OUTPUTS_DIR / "parsed_custom"
 TRAIN_DIR = OUTPUTS_DIR / "train"
