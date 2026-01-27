@@ -248,7 +248,7 @@ def write_experiment_json(
     print(f"[JSON] wrote: {out_path}")
 
 
-def resolve_pcap_path(pcap_arg: str) :
+def resolve_pcap_path(pcap_arg: str) -> Path:
     p = Path(pcap_arg)
     if p.exists():
         return p
@@ -279,98 +279,13 @@ def main() -> None:
     '''
 
     ap = argparse.ArgumentParser()
-    ap.add_argument("--pcap", required=True, help="Full path to PCAP file")
-    ap.add_argument("--csv", required=True, help="Output CSV name passed to LLMPot parser")
-    ap.add_argument("--clen", required=True, type=int, help="Context length (clen)")
-    ap.add_argument("--exp", required=True, help="Experiment folder name (exp)")
     ap.add_argument("--max_iter", required=True, type=int, help="max_iter / max_iteration")
-    ap.add_argument("--p", default="502", help="Modbus/TCP port (default 502)")
+    ap.add_argument("--exp", required=True, help="Experiment folder name (exp)")
     args = ap.parse_args()
 
-    pcap_path = resolve_pcap_path(args.pcap)
-    print(f"[PCAP] using: {pcap_path}")
 
 
     exp_name = args.exp
-    out_csv_name = args.csv
-    context_len = args.clen
-    max_iter = args.max_iter
-    port = args.p   # 3) Run LLMPot parser in env (no need for "conda activate")
-    # python -m src.dataset_generation.parse -pcap ... -csv ... -p 502 -layer mbtcp -clen ... -exp ... -max_iter ... -pr mbtcp
-    run_cmd(
-        [
-
-            "python",
-            "-m",
-            "src.dataset_generation.parse",
-            "-pcap",
-            str(args.pcap),
-            "-csv",
-            out_csv_name,
-            "-p",
-            str(port),
-            "-layer",
-            "mbtcp",
-            "-clen",
-            str(context_len),
-            "-exp",
-            exp_name,
-            "-max_iter",
-            str(max_iter),
-            "-pr",
-            "mbtcp",
-        ],
-        cwd=LLMPOT_ROOT,
-    )
-
-    # 4-5) Create folders + move split files
-    parsed_exp_dir = PARSED_CUSTOM_DIR / exp_name
-    if not parsed_exp_dir.exists():
-        raise FileNotFoundError(f"Parsed experiment dir not found: {parsed_exp_dir}")
-
-    n_tr, n_va, n_te = move_split_files(parsed_exp_dir, exp_name)
-    print(f"[OK] moved train={n_tr}, val={n_va}, test={n_te}")
-
-    # 6-7) Run configuration extractor (in WDT pcap directory)
-    if not CONFIG_EXTRACTOR.exists():
-        raise FileNotFoundError(f"Config extractor not found: {CONFIG_EXTRACTOR}")
-
-    # Your command: python ./main_Configuration_extractor.py pcap_file.pcap max_iteration
-    run_cmd(
-        [
-
-            "python",
-            str(CONFIG_EXTRACTOR),
-            str(pcap_path),
-            str(max_iter),
-        ],
-        cwd=WDT_PCAP_DIR,
-    )
-
-    # 9) Read summary txt
-    # expected: {pcap_file_name}_{max_iteration}_modbus_summary.txt
-    # If pcap is ".../capture.pcap", this becomes "capture_10000_modbus_summary.txt"
-    summary_path = WDT_PCAP_DIR / f"{pcap_path.stem}_{max_iter}_modbus_summary.txt"
-    if not summary_path.exists():
-        raise FileNotFoundError(
-            f"Summary file not found: {summary_path}\n"
-            f"Check what main_Configuration_extractor.py actually writes."
-        )
-
-    summary_vals = parse_modbus_summary(summary_path)
-    print(f"[SUMMARY] {summary_vals}")
-
-    # 8-9) Create JSON experiment file with extracted values
-    out_json_path = EXPERIMENTS_BYT5_DIR / f"{exp_name}.json"
-    write_experiment_json(
-        exp_name=exp_name,
-        context_len=context_len,
-        size=args.max_iter,
-        summary_vals=summary_vals,
-        out_path=out_json_path,
-    )
-
-
         # ---------------------------
     # 10) Fine-tune (multi_trainer)
     # ---------------------------
@@ -382,9 +297,8 @@ def main() -> None:
     # Fine-tune
     run_cmd(
         [
-            "conda", "run", "-n", CONDA_ENV_NAME,
             "python", "-u", "-m", "src.finetune.multi_trainer",
-            "-p", f"{args.max_iteration}:1",
+            "-p", f"{args.max_iter}:1",
             "-model", "byt5-small",
             "-cfg", str(cfg_path),
         ],
@@ -396,7 +310,6 @@ def main() -> None:
     # ---------------------------
     run_cmd(
         [
-            "conda", "run", "-n", CONDA_ENV_NAME,
             "python", "-u", "-m", "src.results.bca_rva_per_model_size",
             "-model", "byt5-small",
             "-cfg", str(cfg_path),
