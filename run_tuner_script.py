@@ -275,8 +275,8 @@ def resolve_pcap_path(pcap_arg: str) -> Path:
 def main() -> None:
     r'''
     Example
-     python .\wdt_training_script.py --pcap attack_1 --csv wdt_attack_1_c1_10000 --p 502  --clen 1 --exp wdt_attack1_c1_10000 --max_iter 10000
-    '''
+    python .\run_tuner_script.py --exp wdt_attack1_c0_5000 --max_iter 5000
+      '''
 
     ap = argparse.ArgumentParser()
     ap.add_argument("--max_iter", required=True, type=int, help="max_iter / max_iteration")
@@ -300,7 +300,7 @@ def main() -> None:
             "python", "-u", "-m", "src.finetune.multi_trainer",
             "-p", f"{args.max_iter}:1",
             "-model", "byt5-small",
-            "-cfg", str(cfg_path),
+            "-cfg", f"{exp_name}.json",
         ],
         cwd=LLMPOT_ROOT,
     )
@@ -312,7 +312,7 @@ def main() -> None:
         [
             "python", "-u", "-m", "src.results.bca_rva_per_model_size",
             "-model", "byt5-small",
-            "-cfg", str(cfg_path),
+            "-cfg", f"{exp_name}.json",
         ],
         cwd=LLMPOT_ROOT,
     )
