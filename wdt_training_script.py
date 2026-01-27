@@ -295,10 +295,13 @@ def rename_split_files_in_dest(exp_name: str, old_base: str, new_base: str) -> N
       validation/<exp>/<old_base>_val.csv -> validation/<exp>/<new_base>_val.csv
       test/<exp>/<old_base>_test.csv -> test/<exp>/<new_base>_test.csv
     """
+    # exclute .csv from the new_base
+    if new_base.lower().endswith(".csv"):
+        new_base = new_base[:-4]
     mapping = [
-        (TRAIN_DIR / f"{exp_name}.json" / f"{old_base}_train.csv", TRAIN_DIR / f"{exp_name}.json" / f"{new_base}_train.csv"),
-        (VAL_DIR / f"{exp_name}.json" / f"{old_base}_val.csv", VAL_DIR / f"{exp_name}.json" / f"{new_base}_val.csv"),
-        (TEST_DIR / f"{exp_name}.json" / f"{old_base}_test.csv", TEST_DIR / f"{exp_name}.json" / f"{new_base}_test.csv"),
+        (TRAIN_DIR / f"{exp_name}.json" / f"{old_base}_train.csv", TRAIN_DIR / f"{exp_name}.json" / f"{new_base}.csv"),
+        (VAL_DIR / f"{exp_name}.json" / f"{old_base}_val.csv", VAL_DIR / f"{exp_name}.json" / f"{new_base}.csv"),
+        (TEST_DIR / f"{exp_name}.json" / f"{old_base}_test.csv", TEST_DIR / f"{exp_name}.json" / f"{new_base}.csv"),
     ]
 
     for src, dst in mapping:
