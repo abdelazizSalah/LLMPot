@@ -399,6 +399,9 @@ def main() -> None:
     # Build new dataset base name and rename split CSVs accordingly
     # old_base is what you passed via --csv
     old_base = out_csv_name  # e.g. wdt_attack_1_c0_5000
+    #exclude the .csv extension if present
+    if old_base.lower().endswith(".csv"):
+        old_base = old_base[:-4]
     new_base = build_dataset_base_name(
         protocol="mbtcp",
         client="client",
