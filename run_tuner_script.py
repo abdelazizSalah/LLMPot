@@ -54,6 +54,35 @@ CONDA_ENV_NAME = "llmpot"
 
 import time
 
+def build_config_folder_name(
+    protocol: str,
+    client: str,
+    context_len: int,
+    size: int,
+    function_codes: list[int],
+    min_value: int,
+    max_value: int,
+    min_address: int,
+    max_address: int,
+    sc: int,
+    sr: int,
+) -> str:
+    """
+    protocol-client-c{context}-s{size}-f{f1_f2}-v{min_max}-a{min_max}-sc{sc}-sr{sr}
+    """
+    fcs = "_".join(str(f) for f in function_codes)
+    return (
+        f"{protocol}-{client}"
+        f"-c{context_len}"
+        f"-s{size}"
+        f"-f{fcs}"
+        f"-v{min_value}_{max_value}"
+        f"-a{min_address}_{max_address}"
+        f"-sc{sc}"
+        f"-sr{sr}"
+    )
+
+
 def run_cmd_capture(cmd: list[str], cwd: Path | None = None) -> str:
     """Run command and return combined stdout/stderr (also prints live)."""
     print(f"\n[RUN] {' '.join(cmd)}")
@@ -77,24 +106,41 @@ def run_cmd_capture(cmd: list[str], cwd: Path | None = None) -> str:
     return "".join(out_lines)
 
 
-def find_latest_run_id(checkpoints_dir: Path) -> str:
-    """
-    Find the run folder name like YYYYMMDDThhmm... inside checkpoints_dir.
-    Returns the newest by filesystem mtime.
-    """
-    if not checkpoints_dir.exists():
-        raise FileNotFoundError(f"Checkpoints dir not found: {checkpoints_dir}")
+# def find_latest_run_id(checkpoints_dir: Path) -> str:
+#     """
+#     Find the run folder name like YYYYMMDDThhmm... inside checkpoints_dir.
+#     Returns the newest by filesystem mtime.
+#     """
+#     if not checkpoints_dir.exists():
+#         raise FileNotFoundError(f"Checkpoints dir not found: {checkpoints_dir}")
 
-    candidates = [p for p in checkpoints_dir.iterdir() if p.is_dir() and re.match(r"^\d{8}T\d{4}", p.name)]
-    if not candidates:
-        # show debug listing
-        kids = [p.name for p in checkpoints_dir.iterdir()]
+#     candidates = [p for p in checkpoints_dir.iterdir() if p.is_dir() and re.match(r"^\d{8}T\d{4}", p.name)]
+#     if not candidates:
+#         # show debug listing
+#         kids = [p.name for p in checkpoints_dir.iterdir()]
+#         raise FileNotFoundError(
+#             f"No run-id folders (YYYYMMDDThhmm) found under: {checkpoints_dir}\n"
+#             f"Found: {kids}"
+#         )
+
+#     latest = max(candidates, key=lambda p: p.stat().st_mtime)
+#     return latest.name
+def find_latest_run_id_in_config(config_dir: Path) -> str:
+    if not config_dir.exists():
+        raise FileNotFoundError(f"Config dir not found: {config_dir}")
+
+    runs = [
+        p for p in config_dir.iterdir()
+        if p.is_dir() and re.match(r"^\d{8}T\d{4}", p.name)
+    ]
+
+    if not runs:
         raise FileNotFoundError(
-            f"No run-id folders (YYYYMMDDThhmm) found under: {checkpoints_dir}\n"
-            f"Found: {kids}"
+            f"No run-id folders found in: {config_dir}\n"
+            f"Found: {[p.name for p in config_dir.iterdir()]}"
         )
 
-    latest = max(candidates, key=lambda p: p.stat().st_mtime)
+    latest = max(runs, key=lambda p: p.stat().st_mtime)
     return latest.name
 
 
@@ -282,9 +328,12 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--max_iter", required=True, type=int, help="max_iter / max_iteration")
     ap.add_argument("--exp", required=True, help="Experiment folder name (exp)")
+    ap.add_argument("--pcap", required=True, help="Full path to PCAP file")
+    ap.add_argument("--clen", required=True, type=int, help="Context length (clen)")
+
     args = ap.parse_args()
-
-
+    max_iter = args.max_iter
+    context_len = args.clen
 
     exp_name = args.exp
         # ---------------------------
@@ -299,12 +348,13 @@ def main() -> None:
     # run_cmd(
     #     [
     #         "python", "-u", "-m", "src.finetune.multi_trainer",
-    #         "-p", f"{args.max_iter}:1",
+    #         "-p", f"{max_iter}:1",
     #         "-model", "byt5-small",
     #         "-cfg", f"{exp_name}.json",
     #     ],
     #     cwd=LLMPOT_ROOT,
     # )
+
 
     # ---------------------------
     # 11) Compute results (BCA/RVA)
@@ -322,7 +372,46 @@ def main() -> None:
     # 12) Discover checkpoint run id
     # ---------------------------
     ckpt_root = LLMPOT_ROOT / "checkpoints" / "byt5-small" / f'{exp_name}.json'
-    run_id = find_latest_run_id(ckpt_root)
+
+    pcap_path = resolve_pcap_path(args.pcap)
+    summary_path = WDT_PCAP_DIR / f"{pcap_path.stem}_{max_iter}_modbus_summary.txt"
+    if not summary_path.exists():
+        raise FileNotFoundError(
+            f"Summary file not found: {summary_path}\n"
+            f"Check what main_Configuration_extractor.py actually writes."
+        )
+
+    summary_vals = parse_modbus_summary(summary_path)
+    print(f"[SUMMARY] {summary_vals}")
+    config_folder = build_config_folder_name(
+    protocol="mbtcp",
+    client="client",
+    context_len=context_len,
+    size=args.max_iter,
+    function_codes=summary_vals["function_codes"],
+    min_value=summary_vals["min_value"],
+    max_value=summary_vals["max_value"],
+    min_address=summary_vals["min_address"],
+    max_address=summary_vals["max_address"],
+    sc=summary_vals["sc"],
+    sr=summary_vals["sr"],
+    )
+
+    ckpt_root = (
+    LLMPOT_ROOT
+    / "checkpoints"
+    / "byt5-small"
+    / f"{exp_name}.json"
+    / config_folder
+    )
+
+    run_id = find_latest_run_id_in_config(ckpt_root)
+
+    print(f"[CKPT] config folder : {config_folder}")
+    print(f"[CKPT] latest run id : {run_id}")
+
+
+    # run_id = find_latest_run_id(ckpt_root)
     print(f"[CKPT] latest run id: {run_id}")
 
     # ---------------------------
