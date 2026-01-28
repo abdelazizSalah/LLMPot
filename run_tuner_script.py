@@ -144,27 +144,49 @@ def find_latest_run_id_in_config(config_dir: Path) -> str:
     return latest.name
 
 
+# def create_plot_script(exp_name: str, run_id: str, plots_dir: Path) -> Path:
+#     """
+#     Create src/plots/mbtcp/bca_rva_wdt_<experiment_name>.py with the template.
+#     """
+#     ensure_dir(plots_dir)
+#     # make a safe python module name (hyphens not allowed)
+#     safe_exp = re.sub(r"[^0-9a-zA-Z_]", "_", exp_name)
+#     script_name = f"bca_rva_wdt_{safe_exp}.py"
+#     script_path = plots_dir / script_name
+
+#     content = f"""from src.plots.from_csv import NATURE, Plots
+
+#     plot = Plots("{exp_name}", "{run_id}")
+#     colors = {{dataset.functions_str(): NATURE[i] for i, dataset in enumerate(plot.finetuner.datasets)}}
+#     labels = [dataset.functions_str() for dataset in plot.finetuner.datasets]
+#     plot.accuracy_per_epoch(colors, labels)
+#     plot.loss_per_epoch(colors, labels)
+#     """
+#     script_path.write_text(content, encoding="utf-8")
+#     print(f"[PLOT] wrote: {script_path}")
+#     return script_path
+
 def create_plot_script(exp_name: str, run_id: str, plots_dir: Path) -> Path:
-    """
-    Create src/plots/mbtcp/bca_rva_wdt_<experiment_name>.py with the template.
-    """
     ensure_dir(plots_dir)
-    # make a safe python module name (hyphens not allowed)
+
     safe_exp = re.sub(r"[^0-9a-zA-Z_]", "_", exp_name)
     script_name = f"bca_rva_wdt_{safe_exp}.py"
     script_path = plots_dir / script_name
 
-    content = f"""from src.plots.from_csv import NATURE, Plots
+    content = (
+        'from src.plots.from_csv import NATURE, Plots\n\n'
+        f'plot = Plots("{exp_name}", "{run_id}")\n'
+        'colors = {dataset.functions_str(): NATURE[i] '
+        'for i, dataset in enumerate(plot.finetuner.datasets)}\n'
+        'labels = [dataset.functions_str() for dataset in plot.finetuner.datasets]\n'
+        'plot.accuracy_per_epoch(colors, labels)\n'
+        'plot.loss_per_epoch(colors, labels)\n'
+    )
 
-    plot = Plots("{exp_name}", "{run_id}")
-    colors = {{dataset.functions_str(): NATURE[i] for i, dataset in enumerate(plot.finetuner.datasets)}}
-    labels = [dataset.functions_str() for dataset in plot.finetuner.datasets]
-    plot.accuracy_per_epoch(colors, labels)
-    plot.loss_per_epoch(colors, labels)
-    """
     script_path.write_text(content, encoding="utf-8")
     print(f"[PLOT] wrote: {script_path}")
     return script_path
+
 
 
 
