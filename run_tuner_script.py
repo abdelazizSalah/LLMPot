@@ -296,15 +296,15 @@ def main() -> None:
         raise FileNotFoundError(f"Config JSON not found: {cfg_path}")
 
     # Fine-tune
-    run_cmd(
-        [
-            "python", "-u", "-m", "src.finetune.multi_trainer",
-            "-p", f"{args.max_iter}:1",
-            "-model", "byt5-small",
-            "-cfg", f"{exp_name}.json",
-        ],
-        cwd=LLMPOT_ROOT,
-    )
+    # run_cmd(
+    #     [
+    #         "python", "-u", "-m", "src.finetune.multi_trainer",
+    #         "-p", f"{args.max_iter}:1",
+    #         "-model", "byt5-small",
+    #         "-cfg", f"{exp_name}.json",
+    #     ],
+    #     cwd=LLMPOT_ROOT,
+    # )
 
     # ---------------------------
     # 11) Compute results (BCA/RVA)
