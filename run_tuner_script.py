@@ -175,7 +175,7 @@ def create_plot_script(exp_name: str, run_id: str, plots_dir: Path) -> Path:
 
     content = (
         'from src.plots.from_csv import NATURE, Plots\n\n'
-        f'plot = Plots("{exp_name}", "{run_id}")\n'
+        f'plot = Plots("{exp_name}.json", "{run_id}")\n'
         'colors = {dataset.functions_str(): NATURE[i] '
         'for i, dataset in enumerate(plot.finetuner.datasets)}\n'
         'labels = [dataset.functions_str() for dataset in plot.finetuner.datasets]\n'
