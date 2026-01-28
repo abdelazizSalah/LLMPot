@@ -315,7 +315,7 @@ def rename_split_files_in_dest(exp_name: str, old_base: str, new_base: str) -> N
 def main() -> None:
     r'''
     Example
-     python .\wdt_training_script.py --pcap attack_1 --csv wdt_attack_1_c1_10000 --p 502  --clen 1 --exp wdt_attack1_c1_10000 --max_iter 10000
+     python .\wdt_data_prepration_script.py --pcap attack_1 --csv wdt_attack_1_c1_10000 --p 502  --clen 1 --exp wdt_attack1_c1_10000 --max_iter 10000
     '''
 
     ap = argparse.ArgumentParser()
