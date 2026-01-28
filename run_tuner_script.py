@@ -106,25 +106,6 @@ def run_cmd_capture(cmd: list[str], cwd: Path | None = None) -> str:
     return "".join(out_lines)
 
 
-# def find_latest_run_id(checkpoints_dir: Path) -> str:
-#     """
-#     Find the run folder name like YYYYMMDDThhmm... inside checkpoints_dir.
-#     Returns the newest by filesystem mtime.
-#     """
-#     if not checkpoints_dir.exists():
-#         raise FileNotFoundError(f"Checkpoints dir not found: {checkpoints_dir}")
-
-#     candidates = [p for p in checkpoints_dir.iterdir() if p.is_dir() and re.match(r"^\d{8}T\d{4}", p.name)]
-#     if not candidates:
-#         # show debug listing
-#         kids = [p.name for p in checkpoints_dir.iterdir()]
-#         raise FileNotFoundError(
-#             f"No run-id folders (YYYYMMDDThhmm) found under: {checkpoints_dir}\n"
-#             f"Found: {kids}"
-#         )
-
-#     latest = max(candidates, key=lambda p: p.stat().st_mtime)
-#     return latest.name
 def find_latest_run_id_in_config(config_dir: Path) -> str:
     if not config_dir.exists():
         raise FileNotFoundError(f"Config dir not found: {config_dir}")
@@ -144,27 +125,6 @@ def find_latest_run_id_in_config(config_dir: Path) -> str:
     return latest.name
 
 
-# def create_plot_script(exp_name: str, run_id: str, plots_dir: Path) -> Path:
-#     """
-#     Create src/plots/mbtcp/bca_rva_wdt_<experiment_name>.py with the template.
-#     """
-#     ensure_dir(plots_dir)
-#     # make a safe python module name (hyphens not allowed)
-#     safe_exp = re.sub(r"[^0-9a-zA-Z_]", "_", exp_name)
-#     script_name = f"bca_rva_wdt_{safe_exp}.py"
-#     script_path = plots_dir / script_name
-
-#     content = f"""from src.plots.from_csv import NATURE, Plots
-
-#     plot = Plots("{exp_name}", "{run_id}")
-#     colors = {{dataset.functions_str(): NATURE[i] for i, dataset in enumerate(plot.finetuner.datasets)}}
-#     labels = [dataset.functions_str() for dataset in plot.finetuner.datasets]
-#     plot.accuracy_per_epoch(colors, labels)
-#     plot.loss_per_epoch(colors, labels)
-#     """
-#     script_path.write_text(content, encoding="utf-8")
-#     print(f"[PLOT] wrote: {script_path}")
-#     return script_path
 
 def create_plot_script(exp_name: str, run_id: str, plots_dir: Path) -> Path:
     ensure_dir(plots_dir)
@@ -344,7 +304,7 @@ def main() -> None:
     r'''
     This should be run on the server after running: wdt_training_script.py on my PC.
     Example
-    python .\run_tuner_script.py --exp wdt_attack1_c0_5000 --max_iter 5000
+    python run_tuner_script.py --max_iter 5000 --exp wdt_attack1_c0_5000 --pcap attack_1 --clen 0
       '''
 
     ap = argparse.ArgumentParser()
@@ -367,15 +327,15 @@ def main() -> None:
         raise FileNotFoundError(f"Config JSON not found: {cfg_path}")
 
     # Fine-tune
-    # run_cmd(
-    #     [
-    #         "python", "-u", "-m", "src.finetune.multi_trainer",
-    #         "-p", f"{max_iter}:1",
-    #         "-model", "byt5-small",
-    #         "-cfg", f"{exp_name}.json",
-    #     ],
-    #     cwd=LLMPOT_ROOT,
-    # )
+    run_cmd(
+        [
+            "python", "-u", "-m", "src.finetune.multi_trainer",
+            "-p", f"{max_iter}:1",
+            "-model", "byt5-small",
+            "-cfg", f"{exp_name}.json",
+        ],
+        cwd=LLMPOT_ROOT,
+    )
 
 
     # ---------------------------
