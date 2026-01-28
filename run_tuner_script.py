@@ -321,7 +321,7 @@ def main() -> None:
     # ---------------------------
     # 12) Discover checkpoint run id
     # ---------------------------
-    ckpt_root = LLMPOT_ROOT / "checkpoints" / "byt5-small" / exp_name
+    ckpt_root = LLMPOT_ROOT / "checkpoints" / "byt5-small" / f'{exp_name}.json'
     run_id = find_latest_run_id(ckpt_root)
     print(f"[CKPT] latest run id: {run_id}")
 
