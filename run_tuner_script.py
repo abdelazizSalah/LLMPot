@@ -274,6 +274,7 @@ def resolve_pcap_path(pcap_arg: str) -> Path:
 
 def main() -> None:
     r'''
+    This should be run on the server after running: wdt_training_script.py on my PC.
     Example
     python .\run_tuner_script.py --exp wdt_attack1_c0_5000 --max_iter 5000
       '''
