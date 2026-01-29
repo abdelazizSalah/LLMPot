@@ -119,9 +119,11 @@ def run_inference(hex_input: str, max_length: int = 512) -> str:
 # ============================================================
 
 if __name__ == "__main__":
-
-    test_input = "04ad000000150010001700070e02d4f6905690f2fc5bc71801e123"
-
+    # to run: python -m src.inference.my_byt5_inference
+    # test_input = "04ad000000150010001700070e02d4f6905690f2fc5bc71801e123"
+    # read the test_input from the user
+    test_input = input("Enter hex-encoded input: ").strip()
+    print(f'read test input is: {test_input}')
     print("\n================ INFERENCE ================\n")
     print("Input : ", test_input)
 
