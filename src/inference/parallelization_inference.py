@@ -9,7 +9,7 @@ LLMPot ByT5 inference + evaluation script
 
 Author: Abdelaziz Neamatallah
 """
-
+from tqdm import tqdm
 import json
 import csv
 import torch
@@ -156,19 +156,43 @@ def run_csv_inference(csv_path: str):
             rows.append((idx, row["source_text"].strip(), row["target_text"].strip()))
 
     # ---------- GPU inference (SERIAL) ----------
+    # predictions = []
+    # for idx, src, gt in rows:
+    #     pred = run_inference(src)
+    #     predictions.append((idx, pred, gt))
     predictions = []
-    for idx, src, gt in rows:
+
+    for idx, src, gt in tqdm(
+        rows,
+        desc="GPU inference",
+        total=len(rows),
+        ncols=80
+    ):
         pred = run_inference(src)
         predictions.append((idx, pred, gt))
 
+
     # ---------- Metrics (PARALLEL CPU) ----------
     results = []
+    # with ThreadPoolExecutor(max_workers=8) as pool:
+    #     futures = [
+    #         pool.submit(process_metrics, idx, pred, gt)
+    #         for idx, pred, gt in predictions
+    #     ]
+    #     for f in as_completed(futures):
+    #         results.append(f.result())
     with ThreadPoolExecutor(max_workers=8) as pool:
         futures = [
             pool.submit(process_metrics, idx, pred, gt)
             for idx, pred, gt in predictions
         ]
-        for f in as_completed(futures):
+
+        for f in tqdm(
+            as_completed(futures),
+            total=len(futures),
+            desc="Metric computation",
+            ncols=80
+        ):
             results.append(f.result())
 
     results.sort(key=lambda x: x["index"])
