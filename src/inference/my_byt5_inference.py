@@ -122,12 +122,14 @@ if __name__ == "__main__":
     # to run: python -m src.inference.my_byt5_inference
     # test_input = "04ad000000150010001700070e02d4f6905690f2fc5bc71801e123"
     # read the test_input from the user
-    test_input = input("Enter hex-encoded input: ").strip()
-    print(f'read test input is: {test_input}')
-    print("\n================ INFERENCE ================\n")
-    print("Input : ", test_input)
+    while(True):
+        print("\n================ INFERENCE ================\n")
+        test_input = input("Enter hex-encoded input: ").strip()
+        if test_input == 'exit':
+            break
+        print(f'read test input is: {test_input}')
+        print("Input : ", test_input)
+        output = run_inference(test_input)
 
-    output = run_inference(test_input)
-
-    print("Output:", output)
-    print("\n==========================================\n")
+        print("Output:", output)
+        print("\n==========================================\n")
