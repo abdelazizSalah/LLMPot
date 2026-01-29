@@ -1,0 +1,4 @@
+Samples           : 2498
+Mean BCA          : 0.995464
+Mean RVA          : 0.999405
+Non-perfect count : 54
