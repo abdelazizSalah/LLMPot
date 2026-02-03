@@ -305,6 +305,7 @@ def main() -> None:
     This should be run on the server after running: wdt_training_script.py on my PC.
     Example
     python run_tuner_script.py --max_iter 5000 --exp wdt_attack1_c0_5000 --pcap attack_1 --clen 0
+    python run_tuner_script.py --max_iter 200 --exp wdt_normal_c0_200 --pcap normal --clen 0
       '''
 
     ap = argparse.ArgumentParser()
