@@ -1,0 +1,34 @@
+{
+  "model_type": "google",
+  "model_name": "byt5-small",
+  "max_epochs": 30,
+  "target_max_token_len": 512,
+  "source_max_token_len": 512,
+  "batch_size": 1,
+  "datasets": [
+    {
+      "protocol": "mbtcp",
+      "size": 800,
+      "client": "client",
+      "functions": [
+        1,
+        3,
+        6
+      ],
+      "values": {
+        "low": 0,
+        "high": 0
+      },
+      "addresses": {
+        "low": 1,
+        "high": 49
+      },
+      "server": {
+        "name": "no_logic_server",
+        "coils": 24,
+        "registers": 5
+      },
+      "context": 0
+    }
+  ]
+}
