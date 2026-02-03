@@ -11,5 +11,20 @@ ENV/
 nohup.out
 outputs/logs
 outputs/datasets/dumps
-Modbus_dataset/
+# Modbus_dataset/
 outputs/datasets/parsed_custom
+
+
+# Exceptions
+# Ignore everything in Modbus_dataset
+Modbus_dataset/**
+
+# Re-allow directory traversal
+!Modbus_dataset/
+!Modbus_dataset/WDT/
+!Modbus_dataset/WDT/WDT/
+!Modbus_dataset/WDT/WDT/Network_dataset/
+!Modbus_dataset/WDT/WDT/Network_dataset/pcap/
+
+# Re-allow txt files only
+!Modbus_dataset/WDT/WDT/Network_dataset/pcap/*.txt

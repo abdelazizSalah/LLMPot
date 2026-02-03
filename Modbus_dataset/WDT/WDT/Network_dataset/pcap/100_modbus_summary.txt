@@ -1,0 +1,8 @@
+=== MODBUS/TCP PCAP SUMMARY ===
+function_codes: [1, 3]
+min_value: 0
+max_value: 0
+min_address: 1
+max_address: 39
+sc: 6
+sr: 3
