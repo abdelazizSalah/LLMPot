@@ -1,0 +1,199 @@
+{"valid": false, "error": "Uni_ID: 20, expected: 02", "context": "", "request": "015c00000006020100010001", "response": "015c0000004020100", "expected_response": "015c0000000402010100"}
+{"valid": false, "error": "Trans_ID: ['09', '40'], expected: ['00', '94']", "context": "", "request": "009400000006170100170001", "response": "09400000", "expected_response": "00940000000417010100"}
+{"valid": false, "error": "Uni_ID: 0, expected: 02", "context": "", "request": "015c00000006020300020001", "response": "015c00000", "expected_response": "015c000000050203020000"}
+{"valid": false, "error": "Uni_ID: 20, expected: 02", "context": "", "request": "015c00000006020300020001", "response": "015c00000040203030", "expected_response": "015c000000050203020000"}
+{"valid": false, "error": "Uni_ID: 10, expected: 01", "context": "", "request": "015d00000006010300010001", "response": "015d00000060103000", "expected_response": "015d000000050103020000"}
+{"valid": false, "error": "Trans_ID: ['02', 'd0'], expected: ['01', '5d']", "context": "", "request": "015d00000006050300030001", "response": "02d0000005050300", "expected_response": "015d000000050503020000"}
+{"valid": false, "error": "Uni_ID: 0, expected: 05", "context": "", "request": "015d00000006050300030001", "response": "015d00000", "expected_response": "015d000000050503020000"}
+{"valid": false, "error": "Uni_ID: 20, expected: 02", "context": "", "request": "015e00000006020100010001", "response": "015e0000006020100", "expected_response": "015e0000000402010100"}
+{"valid": false, "error": "Uni_ID: 30, expected: 03", "context": "", "request": "015e00000006030100010001", "response": "015e0000004030100", "expected_response": "015e0000000403010100"}
+{"valid": false, "error": "Uni_ID: 00, expected: 03", "context": "", "request": "015e00000006030100010001", "response": "015e0000", "expected_response": "015e0000000403010100"}
+{"valid": false, "error": "Uni_ID: 10, expected: 01", "context": "", "request": "015f00000006010300010001", "response": "015f0000006010300", "expected_response": "015f000000050103020000"}
+{"valid": false, "error": "Uni_ID: 01, expected: 04", "context": "", "request": "015f00000006040100020001", "response": "015f000004040100", "expected_response": "015f0000000404010100"}
+{"valid": false, "error": "Trans_ID: ['02', '04'], expected: ['01', '5f']", "context": "", "request": "015f00000006040100020001", "response": "02040100", "expected_response": "015f0000000404010100"}
+{"valid": false, "error": "Uni_ID: 01, expected: 02", "context": "", "request": "016000000006020100010001", "response": "0160000004020100", "expected_response": "01600000000402010100"}
+{"valid": false, "error": "Uni_ID: 0, expected: 01", "context": "", "request": "016000000006010300010001", "response": "016000000", "expected_response": "0160000000050103020000"}
+{"valid": false, "error": "Trans_ID: ['01', '20'], expected: ['01', '60']", "context": "", "request": "016000000006010300010001", "response": "0120000", "expected_response": "0160000000050103020000"}
+{"valid": false, "error": "Uni_ID: 03, expected: 01", "context": "", "request": "016100000006010300010001", "response": "01610000040103000", "expected_response": "0161000000050103020000"}
+{"valid": false, "error": "Trans_ID: ['0e', '01'], expected: ['00', '95']", "context": "", "request": "0095000000061e01001e0001", "response": "0e0100", "expected_response": "0095000000041e010100"}
+{"valid": false, "error": "Uni_ID: 03, expected: 02", "context": "", "request": "016100000006020300020001", "response": "016100000502030300", "expected_response": "0161000000050203020000"}
+{"valid": false, "error": "Uni_ID: 03, expected: 02", "context": "", "request": "016100000006020300020001", "response": "016100000502030300", "expected_response": "0161000000050203020000"}
+{"valid": false, "error": "Uni_ID: 01, expected: 02", "context": "", "request": "016200000006020100010001", "response": "0162000005020100", "expected_response": "01620000000402010100"}
+{"valid": false, "error": "Trans_ID: ['01', '42'], expected: ['01', '62']", "context": "", "request": "016200000006050300030001", "response": "01420000050503000", "expected_response": "0162000000050503020000"}
+{"valid": false, "error": "Trans_ID: ['05', '05'], expected: ['01', '62']", "context": "", "request": "016200000006050300030001", "response": "050503000", "expected_response": "0162000000050503020000"}
+{"valid": false, "error": "Trans_ID: ['01', '43'], expected: ['01', '63']", "context": "", "request": "016300000006010300010001", "response": "0143000000", "expected_response": "0163000000050103020000"}
+{"valid": false, "error": "Uni_ID: 30, expected: 03", "context": "", "request": "016300000006030100010001", "response": "01630000005030100", "expected_response": "01630000000403010100"}
+{"valid": false, "error": "Trans_ID: ['01', '43'], expected: ['01', '63']", "context": "", "request": "016300000006030100010001", "response": "0143000000", "expected_response": "01630000000403010100"}
+{"valid": false, "error": "Uni_ID: 01, expected: 02", "context": "", "request": "016400000006020100010001", "response": "0164000005020100", "expected_response": "01640000000402010100"}
+{"valid": false, "error": "Trans_ID: ['01', '44'], expected: ['01', '64']", "context": "", "request": "016400000006040100020001", "response": "0144000005040100", "expected_response": "01640000000404010100"}
+{"valid": false, "error": "Trans_ID: ['01', '44'], expected: ['01', '64']", "context": "", "request": "016400000006040100020001", "response": "0144000006040100", "expected_response": "01640000000404010100"}
+{"valid": false, "error": "Trans_ID: ['01', '45'], expected: ['01', '65']", "context": "", "request": "016500000006010300010001", "response": "014500000", "expected_response": "0165000000050103020000"}
+{"valid": false, "error": "Uni_ID: 03, expected: 01", "context": "", "request": "016500000006010300010001", "response": "01650000040103000", "expected_response": "0165000000050103020000"}
+{"valid": false, "error": "Trans_ID: ['04', '01'], expected: ['01', '65']", "context": "", "request": "016500000006010300010001", "response": "040103000", "expected_response": "0165000000050103020000"}
+{"valid": false, "error": "Trans_ID: ['01', '46'], expected: ['01', '66']", "context": "", "request": "016600000006020100010001", "response": "014600000502010", "expected_response": "01660000000402010100"}
+{"valid": false, "error": "Trans_ID: ['09', '60'], expected: ['00', '96']", "context": "", "request": "0096000000061f01001f0001", "response": "09600000", "expected_response": "0096000000041f010100"}
+{"valid": false, "error": "Trans_ID: ['01', '46'], expected: ['01', '66']", "context": "", "request": "016600000006020300020001", "response": "0146000000", "expected_response": "0166000000050203020000"}
+{"valid": false, "error": "Uni_ID: 0, expected: 02", "context": "", "request": "016600000006020300020001", "response": "016600000", "expected_response": "0166000000050203020000"}
+{"valid": false, "error": "Trans_ID: ['01', '57'], expected: ['01', '67']", "context": "", "request": "016700000006010300010001", "response": "015700000040103000", "expected_response": "0167000000050103020000"}
+{"valid": false, "error": "Uni_ID: 50, expected: 05", "context": "", "request": "016700000006050300030001", "response": "016700000050503000", "expected_response": "0167000000050503020000"}
+{"valid": false, "error": "Uni_ID: 50, expected: 05", "context": "", "request": "016700000006050300030001", "response": "016700000050503000", "expected_response": "0167000000050503020000"}
+{"valid": false, "error": "Trans_ID: ['01', '48'], expected: ['01', '68']", "context": "", "request": "016800000006020100010001", "response": "0148000000", "expected_response": "01680000000402010100"}
+{"valid": false, "error": "Trans_ID: ['01', '78'], expected: ['01', '68']", "context": "", "request": "016800000006030100010001", "response": "0178000005030100", "expected_response": "01680000000403010100"}
+{"valid": false, "error": "Uni_ID: 01, expected: 03", "context": "", "request": "016800000006030100010001", "response": "0168000005030100", "expected_response": "01680000000403010100"}
+{"valid": false, "error": "Uni_ID: 10, expected: 01", "context": "", "request": "016900000006010300010001", "response": "016900000040103000", "expected_response": "0169000000050103020000"}
+{"valid": false, "error": "Uni_ID: 01, expected: 04", "context": "", "request": "016900000006040100020001", "response": "0169000004040100", "expected_response": "01690000000404010100"}
+{"valid": false, "error": "Trans_ID: ['09', '70'], expected: ['00', '97']", "context": "", "request": "009700000006200100200001", "response": "097000000", "expected_response": "00970000000420010100"}
+{"valid": false, "error": "Uni_ID: 01, expected: 04", "context": "", "request": "016900000006040100020001", "response": "0169000004040100", "expected_response": "01690000000404010100"}
+{"valid": false, "error": "Uni_ID: 0, expected: 02", "context": "", "request": "016a00000006020100010001", "response": "016a00000", "expected_response": "016a0000000402010100"}
+{"valid": false, "error": "Uni_ID: 10, expected: 01", "context": "", "request": "016a00000006010300010001", "response": "016a000000501030", "expected_response": "016a000000050103020000"}
+{"valid": false, "error": "Uni_ID: 00, expected: 01", "context": "", "request": "016a00000006010300010001", "response": "016a000000", "expected_response": "016a000000050103020000"}
+{"valid": false, "error": "Uni_ID: 10, expected: 01", "context": "", "request": "016b00000006010300010001", "response": "016b00000050103010", "expected_response": "016b000000050103020000"}
+{"valid": false, "error": "Uni_ID: 20, expected: 02", "context": "", "request": "016b00000006020300020001", "response": "016b0000005020303030", "expected_response": "016b000000050203020000"}
+{"valid": false, "error": "Uni_ID: 20, expected: 02", "context": "", "request": "016b00000006020300020001", "response": "016b0000005020303030", "expected_response": "016b000000050203020000"}
+{"valid": false, "error": "Uni_ID: 20, expected: 02", "context": "", "request": "016c00000006020100010001", "response": "016c000000502010", "expected_response": "016c0000000402010100"}
+{"valid": false, "error": "Uni_ID: 50, expected: 05", "context": "", "request": "016c00000006050300030001", "response": "016c00000050503000", "expected_response": "016c000000050503020000"}
+{"valid": false, "error": "Uni_ID: 50, expected: 05", "context": "", "request": "016c00000006050300030001", "response": "016c00000050503000", "expected_response": "016c000000050503020000"}
+{"valid": false, "error": "Trans_ID: ['00', '16'], expected: ['01', '6d']", "context": "", "request": "016d00000006010300010001", "response": "0016d00000050103000", "expected_response": "016d000000050103020000"}
+{"valid": false, "error": "Uni_ID: 30, expected: 03", "context": "", "request": "016d00000006030100010001", "response": "016d0000005030100", "expected_response": "016d0000000403010100"}
+{"valid": false, "error": "Uni_ID: 30, expected: 03", "context": "", "request": "016d00000006030100010001", "response": "016d0000005030100", "expected_response": "016d0000000403010100"}
+{"valid": false, "error": "Uni_ID: 01, expected: 02", "context": "", "request": "016e00000006020100010001", "response": "016e000005020100", "expected_response": "016e0000000402010100"}
+{"valid": false, "error": "Trans_ID: ['02', '04'], expected: ['01', '6e']", "context": "", "request": "016e00000006040100020001", "response": "02040100", "expected_response": "016e0000000404010100"}
+{"valid": false, "error": "Trans_ID: ['09', '81'], expected: ['00', '98']", "context": "", "request": "009800000006210100210001", "response": "098101010101010101010", "expected_response": "00980000000421010100"}
+{"valid": false, "error": "Uni_ID: 01, expected: 04", "context": "", "request": "016e00000006040100020001", "response": "016e000004040100", "expected_response": "016e0000000404010100"}
+{"valid": false, "error": "Uni_ID: 10, expected: 01", "context": "", "request": "016f00000006010300010001", "response": "016f00000040103000", "expected_response": "016f000000050103020000"}
+{"valid": false, "error": "Trans_ID: ['00', 'e0'], expected: ['01', '6f']", "context": "", "request": "016f00000006010300010001", "response": "00e016f0000005010300", "expected_response": "016f000000050103020000"}
+{"valid": false, "error": "Trans_ID: ['01', '4f'], expected: ['01', '6f']", "context": "", "request": "016f00000006010300010001", "response": "014f00000050103000", "expected_response": "016f000000050103020000"}
+{"valid": false, "error": "Uni_ID: 00, expected: 02", "context": "", "request": "017000000006020100010001", "response": "01700000", "expected_response": "01700000000402010100"}
+{"valid": false, "error": "Uni_ID: 00, expected: 02", "context": "", "request": "017000000006020300020001", "response": "01700000", "expected_response": "0170000000050203020000"}
+{"valid": false, "error": "Uni_ID: 00, expected: 02", "context": "", "request": "017000000006020300020001", "response": "01700000", "expected_response": "0170000000050203020000"}
+{"valid": false, "error": "Uni_ID: 10, expected: 01", "context": "", "request": "017100000006010300010001", "response": "017100000040103000", "expected_response": "0171000000050103020000"}
+{"valid": false, "error": "Uni_ID: 03, expected: 05", "context": "", "request": "017100000006050300030001", "response": "01710000050503000", "expected_response": "0171000000050503020000"}
+{"valid": false, "error": "Uni_ID: 03, expected: 05", "context": "", "request": "017100000006050300030001", "response": "01710000050503000", "expected_response": "0171000000050503020000"}
+{"valid": false, "error": "Uni_ID: 0, expected: 02", "context": "", "request": "017200000006020100010001", "response": "017200000", "expected_response": "01720000000402010100"}
+{"valid": false, "error": "Uni_ID: 0, expected: 03", "context": "", "request": "017200000006030100010001", "response": "017200000", "expected_response": "01720000000403010100"}
+{"valid": false, "error": "Uni_ID: 01, expected: 03", "context": "", "request": "017200000006030100010001", "response": "0172000005030100", "expected_response": "01720000000403010100"}
+{"valid": false, "error": "Uni_ID: 00, expected: 01", "context": "", "request": "017300000006010300010001", "response": "0173000000", "expected_response": "0173000000050103020000"}
+{"valid": false, "error": "Uni_ID: 01, expected: 04", "context": "", "request": "017300000006040100020001", "response": "0173000004040100", "expected_response": "01730000000404010100"}
+{"valid": false, "error": "Uni_ID: 01, expected: 04", "context": "", "request": "017300000006040100020001", "response": "0173000004040100", "expected_response": "01730000000404010100"}
+{"valid": false, "error": "Trans_ID: ['09', '90'], expected: ['00', '99']", "context": "", "request": "009900000006220100220001", "response": "09900004220100", "expected_response": "00990000000422010100"}
+{"valid": false, "error": "Uni_ID: 01, expected: 02", "context": "", "request": "017400000006020100010001", "response": "0174000005020100", "expected_response": "01740000000402010100"}
+{"valid": false, "error": "Uni_ID: 0, expected: 01", "context": "", "request": "017400000006010300010001", "response": "017400000", "expected_response": "0174000000050103020000"}
+{"valid": false, "error": "Uni_ID: 0, expected: 01", "context": "", "request": "017400000006010300010001", "response": "017400000", "expected_response": "0174000000050103020000"}
+{"valid": false, "error": "Uni_ID: 00, expected: 01", "context": "", "request": "017500000006010300010001", "response": "0175000000", "expected_response": "0175000000050103020000"}
+{"valid": false, "error": "Uni_ID: 00, expected: 02", "context": "", "request": "017500000006020300020001", "response": "01750000", "expected_response": "0175000000050203020000"}
+{"valid": false, "error": "Trans_ID: ['01', '25'], expected: ['01', '75']", "context": "", "request": "017500000006020300020001", "response": "012500000040203030", "expected_response": "0175000000050203020000"}
+{"valid": false, "error": "Uni_ID: 20, expected: 02", "context": "", "request": "017600000006020100010001", "response": "01760000004020100", "expected_response": "01760000000402010100"}
+{"valid": false, "error": "Trans_ID: ['09', 'a0'], expected: ['00', '9a']", "context": "", "request": "009a00000006230100230001", "response": "09a0000005230100", "expected_response": "009a0000000423010100"}
+{"valid": false, "error": "Uni_ID: 50, expected: 05", "context": "", "request": "017600000006050300030001", "response": "017600000050503000", "expected_response": "0176000000050503020000"}
+{"valid": false, "error": "Trans_ID: ['01', '26'], expected: ['01', '76']", "context": "", "request": "017600000006050300030001", "response": "012600000", "expected_response": "0176000000050503020000"}
+{"valid": false, "error": "Uni_ID: 03, expected: 01", "context": "", "request": "017700000006010300010001", "response": "01770000050103000", "expected_response": "0177000000050103020000"}
+{"valid": false, "error": "Uni_ID: 30, expected: 03", "context": "", "request": "017700000006030100010001", "response": "01770000004030100", "expected_response": "01770000000403010100"}
+{"valid": false, "error": "Uni_ID: 01, expected: 03", "context": "", "request": "017700000006030100010001", "response": "017700000503010", "expected_response": "01770000000403010100"}
+{"valid": false, "error": "Uni_ID: 20, expected: 02", "context": "", "request": "017800000006020100010001", "response": "01780000005020100", "expected_response": "01780000000402010100"}
+{"valid": false, "error": "Uni_ID: 01, expected: 04", "context": "", "request": "017800000006040100020001", "response": "0178000004040100", "expected_response": "01780000000404010100"}
+{"valid": false, "error": "Uni_ID: 01, expected: 04", "context": "", "request": "017800000006040100020001", "response": "0178000005040100", "expected_response": "01780000000404010100"}
+{"valid": false, "error": "Uni_ID: 10, expected: 01", "context": "", "request": "017900000006010300010001", "response": "017900000050103000", "expected_response": "0179000000050103020000"}
+{"valid": false, "error": "Uni_ID: 00, expected: 01", "context": "", "request": "017900000006010300010001", "response": "0179000000", "expected_response": "0179000000050103020000"}
+{"valid": false, "error": "Uni_ID: 03, expected: 01", "context": "", "request": "017900000006010300010001", "response": "01790000050103000", "expected_response": "0179000000050103020000"}
+{"valid": false, "error": "Uni_ID: 20, expected: 02", "context": "", "request": "017a00000006020100010001", "response": "017a0000005020100", "expected_response": "017a0000000402010100"}
+{"valid": false, "error": "Uni_ID: 00, expected: 02", "context": "", "request": "017a00000006020300020001", "response": "017a0000", "expected_response": "017a000000050203020000"}
+{"valid": false, "error": "Uni_ID: 20, expected: 02", "context": "", "request": "017a00000006020300020001", "response": "017a00000050203030", "expected_response": "017a000000050203020000"}
+{"valid": false, "error": "Uni_ID: 10, expected: 01", "context": "", "request": "017b00000006010300010001", "response": "017b000000501030101", "expected_response": "017b000000050103020000"}
+{"valid": false, "error": "Uni_ID: 50, expected: 05", "context": "", "request": "017b00000006050300030001", "response": "017b00000050503000", "expected_response": "017b000000050503020000"}
+{"valid": false, "error": "Uni_ID: 50, expected: 05", "context": "", "request": "017b00000006050300030001", "response": "017b0000005050300", "expected_response": "017b000000050503020000"}
+{"valid": false, "error": "Uni_ID: 20, expected: 02", "context": "", "request": "017c00000006020100010001", "response": "017c0000005020100", "expected_response": "017c0000000402010100"}
+{"valid": false, "error": "Trans_ID: ['0e', 'b0'], expected: ['00', '9b']", "context": "", "request": "009b00000006240100240001", "response": "0eb0000005240100", "expected_response": "009b0000000424010100"}
+{"valid": false, "error": "Uni_ID: 0, expected: 03", "context": "", "request": "017c00000006030100010001", "response": "017c00000", "expected_response": "017c0000000403010100"}
+{"valid": false, "error": "Uni_ID: 30, expected: 03", "context": "", "request": "017c00000006030100010001", "response": "017c0000005030100", "expected_response": "017c0000000403010100"}
+{"valid": false, "error": "Uni_ID: 10, expected: 01", "context": "", "request": "017d00000006010300010001", "response": "017d00000050103000", "expected_response": "017d000000050103020000"}
+{"valid": false, "error": "Uni_ID: 40, expected: 04", "context": "", "request": "017d00000006040100020001", "response": "017d0000004040100", "expected_response": "017d0000000404010100"}
+{"valid": false, "error": "Uni_ID: 40, expected: 04", "context": "", "request": "017d00000006040100020001", "response": "017d0000004040100", "expected_response": "017d0000000404010100"}
+{"valid": false, "error": "Uni_ID: 20, expected: 02", "context": "", "request": "017e00000006020100010001", "response": "017e000000502010", "expected_response": "017e0000000402010100"}
+{"valid": false, "error": "Uni_ID: 10, expected: 01", "context": "", "request": "017e00000006010300010001", "response": "017e0000006010300", "expected_response": "017e000000050103020000"}
+{"valid": false, "error": "Trans_ID: ['00', 'e0'], expected: ['01', '7e']", "context": "", "request": "017e00000006010300010001", "response": "00e0000050103000", "expected_response": "017e000000050103020000"}
+{"valid": false, "error": "Uni_ID: 10, expected: 01", "context": "", "request": "017f00000006010300010001", "response": "017f00000040103000", "expected_response": "017f000000050103020000"}
+{"valid": false, "error": "Uni_ID: 20, expected: 02", "context": "", "request": "017f00000006020300020001", "response": "017f0000005020303030", "expected_response": "017f000000050203020000"}
+{"valid": false, "error": "Uni_ID: 20, expected: 02", "context": "", "request": "017f00000006020300020001", "response": "017f0000005020303030", "expected_response": "017f000000050203020000"}
+{"valid": false, "error": "Uni_ID: 10, expected: 02", "context": "", "request": "018000000006020100010001", "response": "018000005020100", "expected_response": "01800000000402010100"}
+{"valid": false, "error": "Uni_ID: 03, expected: 05", "context": "", "request": "018000000006050300030001", "response": "01800000050503000", "expected_response": "0180000000050503020000"}
+{"valid": false, "error": "Uni_ID: 03, expected: 05", "context": "", "request": "018000000006050300030001", "response": "01800000050503000", "expected_response": "0180000000050503020000"}
+{"valid": false, "error": "Uni_ID: 10, expected: 01", "context": "", "request": "018100000006010300010001", "response": "018100000040103000", "expected_response": "0181000000050103020000"}
+{"valid": false, "error": "Trans_ID: ['09', 'c0'], expected: ['00', '9c']", "context": "", "request": "009c00000006250100250001", "response": "09c0000005250100", "expected_response": "009c0000000425010100"}
+{"valid": false, "error": "Uni_ID: 30, expected: 03", "context": "", "request": "018100000006030100010001", "response": "0181000000503010", "expected_response": "01810000000403010100"}
+{"valid": false, "error": "Uni_ID: 30, expected: 03", "context": "", "request": "018100000006030100010001", "response": "01810000006030100", "expected_response": "01810000000403010100"}
+{"valid": false, "error": "Uni_ID: 0, expected: 02", "context": "", "request": "018200000006020100010001", "response": "018200000", "expected_response": "01820000000402010100"}
+{"valid": false, "error": "Uni_ID: 0, expected: 04", "context": "", "request": "018200000006040100020001", "response": "018200000", "expected_response": "01820000000404010100"}
+{"valid": false, "error": "Uni_ID: 0, expected: 04", "context": "", "request": "018200000006040100020001", "response": "018200000", "expected_response": "01820000000404010100"}
+{"valid": false, "error": "Uni_ID: 0, expected: 01", "context": "", "request": "018300000006010300010001", "response": "018300000", "expected_response": "0183000000050103020000"}
+{"valid": false, "error": "Uni_ID: 0, expected: 01", "context": "", "request": "018300000006010300010001", "response": "018300000", "expected_response": "0183000000050103020000"}
+{"valid": false, "error": "Uni_ID: 0, expected: 01", "context": "", "request": "018300000006010300010001", "response": "018300000", "expected_response": "0183000000050103020000"}
+{"valid": false, "error": "Trans_ID: ['09', 'd0'], expected: ['00', '9d']", "context": "", "request": "009d00000006260100260001", "response": "09d000000", "expected_response": "009d0000000426010100"}
+{"valid": false, "error": "Uni_ID: 01, expected: 02", "context": "", "request": "018400000006020100010001", "response": "0184000005020100", "expected_response": "01840000000402010100"}
+{"valid": false, "error": "Uni_ID: 00, expected: 02", "context": "", "request": "018400000006020300020001", "response": "01840000", "expected_response": "0184000000050203020000"}
+{"valid": false, "error": "Uni_ID: 00, expected: 02", "context": "", "request": "018400000006020300020001", "response": "01840000", "expected_response": "0184000000050203020000"}
+{"valid": false, "error": "Uni_ID: 0, expected: 01", "context": "", "request": "018500000006010300010001", "response": "018500000", "expected_response": "0185000000050103020000"}
+{"valid": false, "error": "Uni_ID: 0, expected: 05", "context": "", "request": "018500000006050300030001", "response": "018500000", "expected_response": "0185000000050503020000"}
+{"valid": false, "error": "Uni_ID: 00, expected: 05", "context": "", "request": "018500000006050300030001", "response": "01850000", "expected_response": "0185000000050503020000"}
+{"valid": false, "error": "Uni_ID: 01, expected: 02", "context": "", "request": "018600000006020100010001", "response": "0186000004020100", "expected_response": "01860000000402010100"}
+{"valid": false, "error": "Uni_ID: 0, expected: 03", "context": "", "request": "018600000006030100010001", "response": "018600000", "expected_response": "01860000000403010100"}
+{"valid": false, "error": "Uni_ID: 01, expected: 03", "context": "", "request": "018600000006030100010001", "response": "0186000005030100", "expected_response": "01860000000403010100"}
+{"valid": false, "error": "Uni_ID: 10, expected: 01", "context": "", "request": "018700000006010300010001", "response": "018700000050103000", "expected_response": "0187000000050103020000"}
+{"valid": false, "error": "Uni_ID: 01, expected: 04", "context": "", "request": "018700000006040100020001", "response": "0187000004040100", "expected_response": "01870000000404010100"}
+{"valid": false, "error": "Uni_ID: 01, expected: 04", "context": "", "request": "018700000006040100020001", "response": "0187000004040100", "expected_response": "01870000000404010100"}
+{"valid": false, "error": "Uni_ID: 01, expected: 02", "context": "", "request": "018800000006020100010001", "response": "0188000005020100", "expected_response": "01880000000402010100"}
+{"valid": false, "error": "Uni_ID: 10, expected: 01", "context": "", "request": "018800000006010300010001", "response": "018800000050103000", "expected_response": "0188000000050103020000"}
+{"valid": false, "error": "Uni_ID: 0, expected: 01", "context": "", "request": "018800000006010300010001", "response": "018800000", "expected_response": "0188000000050103020000"}
+{"valid": false, "error": "Uni_ID: 0, expected: 01", "context": "", "request": "018900000006010300010001", "response": "018900000", "expected_response": "0189000000050103020000"}
+{"valid": false, "error": "Uni_ID: 00, expected: 02", "context": "", "request": "018900000006020300020001", "response": "01890000", "expected_response": "0189000000050203020000"}
+{"valid": false, "error": "Uni_ID: 00, expected: 02", "context": "", "request": "018900000006020300020001", "response": "01890000", "expected_response": "0189000000050203020000"}
+{"valid": false, "error": "Trans_ID: ['09', 'e0'], expected: ['00', '9e']", "context": "", "request": "009e00000006270100270001", "response": "09e000005270100", "expected_response": "009e0000000427010100"}
+{"valid": false, "error": "Uni_ID: 20, expected: 02", "context": "", "request": "018a00000006020100010001", "response": "018a0000005020100", "expected_response": "018a0000000402010100"}
+{"valid": false, "error": "Uni_ID: 50, expected: 05", "context": "", "request": "018a00000006050300030001", "response": "018a00000050503000", "expected_response": "018a000000050503020000"}
+{"valid": false, "error": "Uni_ID: 50, expected: 05", "context": "", "request": "018a00000006050300030001", "response": "018a00000050503000", "expected_response": "018a000000050503020000"}
+{"valid": false, "error": "Uni_ID: 10, expected: 01", "context": "", "request": "018b00000006010300010001", "response": "018b00000060103000", "expected_response": "018b000000050103020000"}
+{"valid": false, "error": "Uni_ID: 30, expected: 03", "context": "", "request": "018b00000006030100010001", "response": "018b0000006030100", "expected_response": "018b0000000403010100"}
+{"valid": false, "error": "Uni_ID: 30, expected: 03", "context": "", "request": "018b00000006030100010001", "response": "018b0000005030100", "expected_response": "018b0000000403010100"}
+{"valid": false, "error": "Uni_ID: 20, expected: 02", "context": "", "request": "018c00000006020100010001", "response": "018c000000502010", "expected_response": "018c0000000402010100"}
+{"valid": false, "error": "Uni_ID: 0, expected: 04", "context": "", "request": "018c00000006040100020001", "response": "018c00000", "expected_response": "018c0000000404010100"}
+{"valid": false, "error": "Uni_ID: 40, expected: 04", "context": "", "request": "018c00000006040100020001", "response": "018c0000004040100", "expected_response": "018c0000000404010100"}
+{"valid": false, "error": "Uni_ID: 10, expected: 01", "context": "", "request": "018d00000006010300010001", "response": "018d00000060103000", "expected_response": "018d000000050103020000"}
+{"valid": false, "error": "Uni_ID: 10, expected: 01", "context": "", "request": "018d00000006010300010001", "response": "018d00000050103000", "expected_response": "018d000000050103020000"}
+{"valid": false, "error": "Uni_ID: 00, expected: 01", "context": "", "request": "018d00000006010300010001", "response": "018d000000", "expected_response": "018d000000050103020000"}
+{"valid": false, "error": "Trans_ID: ['00', 'e0'], expected: ['01', '8e']", "context": "", "request": "018e00000006020100010001", "response": "00e000005020100", "expected_response": "018e0000000402010100"}
+{"valid": false, "error": "Uni_ID: 20, expected: 02", "context": "", "request": "018e00000006020300020001", "response": "018e0000005020303030", "expected_response": "018e000000050203020000"}
+{"valid": false, "error": "Trans_ID: ['09', 'f0'], expected: ['00', '9f']", "context": "", "request": "009f00000006280100280001", "response": "09f0000005280100", "expected_response": "009f0000000428010100"}
+{"valid": false, "error": "Uni_ID: 20, expected: 02", "context": "", "request": "018e00000006020300020001", "response": "018e00000060203030", "expected_response": "018e000000050203020000"}
+{"valid": false, "error": "Uni_ID: 03, expected: 01", "context": "", "request": "018f00000006010300010001", "response": "018f0000060103000", "expected_response": "018f000000050103020000"}
+{"valid": false, "error": "Uni_ID: 03, expected: 05", "context": "", "request": "018f00000006050300030001", "response": "018f0000050503000", "expected_response": "018f000000050503020000"}
+{"valid": false, "error": "Uni_ID: 03, expected: 05", "context": "", "request": "018f00000006050300030001", "response": "018f0000050503000", "expected_response": "018f000000050503020000"}
+{"valid": false, "error": "Protocol_ID: ['00', '0'], expected: ['00', '00']", "context": "", "request": "019000000006020100010001", "response": "0190000", "expected_response": "01900000000402010100"}
+{"valid": false, "error": "Uni_ID: 10, expected: 03", "context": "", "request": "019000000006030100010001", "response": "019000005030100", "expected_response": "01900000000403010100"}
+{"valid": false, "error": "Uni_ID: 01, expected: 03", "context": "", "request": "019000000006030100010001", "response": "0190000005030100", "expected_response": "01900000000403010100"}
+{"valid": false, "error": "Uni_ID: 03, expected: 01", "context": "", "request": "019100000006010300010001", "response": "01910000050103000", "expected_response": "0191000000050103020000"}
+{"valid": false, "error": "Uni_ID: 01, expected: 04", "context": "", "request": "019100000006040100020001", "response": "0191000004040100", "expected_response": "01910000000404010100"}
+{"valid": false, "error": "Uni_ID: 01, expected: 04", "context": "", "request": "019100000006040100020001", "response": "0191000004040100", "expected_response": "01910000000404010100"}
+{"valid": false, "error": "Trans_ID: ['0a', '0a'], expected: ['00', 'a0']", "context": "", "request": "00a000000006290100290001", "response": "0a0a0a0a0a0a0a05010", "expected_response": "00a00000000429010100"}
+{"valid": false, "error": "Uni_ID: 0, expected: 02", "context": "", "request": "019200000006020100010001", "response": "019200000", "expected_response": "01920000000402010100"}
+{"valid": false, "error": "Uni_ID: 0, expected: 01", "context": "", "request": "019200000006010300010001", "response": "019200000", "expected_response": "0192000000050103020000"}
+{"valid": false, "error": "Uni_ID: 0, expected: 01", "context": "", "request": "019200000006010300010001", "response": "019200000", "expected_response": "0192000000050103020000"}
+{"valid": false, "error": "Trans_ID: ['04', '01'], expected: ['01', '93']", "context": "", "request": "019300000006010300010001", "response": "040103000", "expected_response": "0193000000050103020000"}
+{"valid": false, "error": "Uni_ID: 0, expected: 02", "context": "", "request": "019300000006020300020001", "response": "019300000", "expected_response": "0193000000050203020000"}
+{"valid": false, "error": "Uni_ID: 0, expected: 02", "context": "", "request": "019300000006020300020001", "response": "019300000", "expected_response": "0193000000050203020000"}
+{"valid": false, "error": "Uni_ID: 0, expected: 02", "context": "", "request": "019400000006020100010001", "response": "019400000", "expected_response": "01940000000402010100"}
+{"valid": false, "error": "Uni_ID: 03, expected: 05", "context": "", "request": "019400000006050300030001", "response": "01940000050503000", "expected_response": "0194000000050503020000"}
+{"valid": false, "error": "Uni_ID: 00, expected: 05", "context": "", "request": "019400000006050300030001", "response": "01940000", "expected_response": "0194000000050503020000"}
+{"valid": false, "error": "Trans_ID: ['01', '25'], expected: ['01', '95']", "context": "", "request": "019500000006010300010001", "response": "012500000", "expected_response": "0195000000050103020000"}
+{"valid": false, "error": "Uni_ID: 01, expected: 03", "context": "", "request": "019500000006030100010001", "response": "0195000006030100", "expected_response": "01950000000403010100"}
+{"valid": false, "error": "Uni_ID: 01, expected: 03", "context": "", "request": "019500000006030100010001", "response": "0195000004030100", "expected_response": "01950000000403010100"}
+{"valid": false, "error": "Uni_ID: 01, expected: 02", "context": "", "request": "019600000006020100010001", "response": "0196000005020100", "expected_response": "01960000000402010100"}
+{"valid": false, "error": "Uni_ID: 02, expected: 04", "context": "", "request": "019600000006040100020001", "response": "019600000404020100", "expected_response": "01960000000404010100"}
+{"valid": false, "error": "Uni_ID: 01, expected: 04", "context": "", "request": "019600000006040100020001", "response": "0196000004040100", "expected_response": "01960000000404010100"}
+{"valid": false, "error": "Uni_ID: 10, expected: 01", "context": "", "request": "019700000006010300010001", "response": "019700000050103000", "expected_response": "0197000000050103020000"}
+{"valid": false, "error": "Uni_ID: 10, expected: 01", "context": "", "request": "019700000006010300010001", "response": "019700000040103000", "expected_response": "0197000000050103020000"}
+{"valid": false, "error": "Uni_ID: 10, expected: 01", "context": "", "request": "019700000006010300010001", "response": "019700000050103000", "expected_response": "0197000000050103020000"}
+{"valid": false, "error": "Uni_ID: 01, expected: 02", "context": "", "request": "019800000006020100010001", "response": "0198000005020100", "expected_response": "01980000000402010100"}
+{"valid": false, "error": "Uni_ID: 03, expected: 02", "context": "", "request": "019800000006020300020001", "response": "01980000050203030301", "expected_response": "0198000000050203020000"}
+{"valid": false, "error": "Uni_ID: 20, expected: 02", "context": "", "request": "019800000006020300020001", "response": "0198000000502030301", "expected_response": "0198000000050203020000"}
+{"valid": false, "error": "Uni_ID: 03, expected: 01", "context": "", "request": "019900000006010300010001", "response": "01990000050103000", "expected_response": "0199000000050103020000"}
+{"valid": false, "error": "Uni_ID: 00, expected: 05", "context": "", "request": "019900000006050300030001", "response": "01990000", "expected_response": "0199000000050503020000"}
+{"valid": false, "error": "Uni_ID: 00, expected: 05", "context": "", "request": "019900000006050300030001", "response": "01990000", "expected_response": "0199000000050503020000"}
