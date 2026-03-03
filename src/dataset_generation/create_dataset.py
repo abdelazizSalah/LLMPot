@@ -26,17 +26,19 @@ def parse_packets(port: int, protocol: str, context_length: int, output_filename
     split(output_filename, experiment)
 
 
-def server(ip: str, port: int, finetuner_model: FinetunerModel, args: Any, server_class: Any):
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-    args = getattr(finetuner_model, f"{finetuner_model.current_dataset.protocol}_args")
-    server_inst = server_class(ip, port, *args)
-    server_inst.run()
+# def server(ip: str, port: int, finetuner_model: FinetunerModel, args: Any, server_class: Any):
+#     loop = asyncio.new_event_loop()
+#     asyncio.set_event_loop(loop)
+#     args = getattr(finetuner_model, f"{finetuner_model.current_dataset.protocol}_args")
+#     server_inst = server_class(ip, port, *args)
+#     server_inst.run()
 
 
 async def main(port: int, interface: str, model: str, experiment: str, overwrite: bool = False):
     try:
-        connection_ip_addr = "127.0.0.1"
+        # connection_ip_addr = "127.0.0.1"
+        connection_ip_addr = "192.168.170.24"
+        print(f"Starting experiment {experiment} with model {model} on port {port} and interface {interface} on ip {connection_ip_addr}")
         with open(f"{EXPERIMENTS}/{model}/{experiment}", "r") as cfg:
             config = cfg.read() # load experiment config
             config = json.loads(config) # parse json
@@ -118,8 +120,8 @@ async def main(port: int, interface: str, model: str, experiment: str, overwrite
 
 def init():
     parser = argparse.ArgumentParser()
-    parser.add_argument('-p', default=10200, type=int, required=False)
-    parser.add_argument('-intrf', default="lo", type=str, required=False)
+    parser.add_argument('-p', default=502, type=int, required=False)
+    parser.add_argument('-intrf', default="Ethernet", type=str, required=False)
     parser.add_argument('-model', default="byt5-small", type=str, required=False)
     parser.add_argument('-exp', default="s7comm-protocol-emulation.json", type=str, required=False)
     parser.add_argument('-o', default=False, type=bool, required=False)
