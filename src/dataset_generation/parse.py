@@ -8,7 +8,7 @@ import pyshark
 from pyshark.packet.packet import Packet
 from tqdm import tqdm
 
-from cfg import DATASET_DUMPS, DATASET_PARSED
+from src.cfg import DATASET_DUMPS, DATASET_PARSED
 
 SOURCE_TEXT = "source_text"
 TARGET_TEXT = "target_text"

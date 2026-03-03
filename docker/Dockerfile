@@ -1,3 +1,4 @@
+# This file is to setup honeyd
 FROM ubuntu:latest
 
 RUN apt-get update && apt-get upgrade -y && apt-get install -y nmap python2 git build-essential net-tools iputils-ping vim

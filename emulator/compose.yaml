@@ -9,7 +9,7 @@ services:
         - CHECKPOINT_PATH_TARGET=./checkpoints/byt5-small/mbtcp-protocol-emulation-add-11.json/
         - EXPERIMENT_PATH=./experiments/byt5-small/mbtcp-protocol-emulation-add-11.json
         - EXPERIMENT=mbtcp-protocol-emulation-add-11.json
-        - MONGO_PWD=m0m@l@b202$
+        - MONGO_PWD=root
     restart: always
     depends_on:
       - mongo
@@ -21,7 +21,7 @@ services:
       context: ..
       dockerfile: ./emulator/web.Dockerfile
       args:
-        - MONGO_PWD=m0m@l@b202$
+        - MONGO_PWD=root
     restart: always
     depends_on:
       - mongo
@@ -34,7 +34,7 @@ services:
       - /Users/cv43/mongo/data:/data/db
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: m0m@l@b202$
+      MONGO_INITDB_ROOT_PASSWORD: root
     ports:
       - "27017:27017"
 

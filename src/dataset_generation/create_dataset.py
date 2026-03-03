@@ -9,9 +9,9 @@ import time
 from multiprocessing import Process
 from typing import Any
 
-from cfg import DATASET_DUMPS, DATASET_PARSED, EXPERIMENTS
-from dataset_generation.parse import parse_with_file
-from dataset_generation.split import split
+from src.cfg import DATASET_DUMPS, DATASET_PARSED, EXPERIMENTS
+from src.dataset_generation.parse import parse_with_file
+from src.dataset_generation.split import split
 from finetune.model.finetuner_model import FinetunerModel
 
 

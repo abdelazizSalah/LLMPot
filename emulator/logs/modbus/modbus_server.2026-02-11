@@ -1,0 +1,8 @@
+2026-02-11 21:09:27,618 [MainThread  ] [INFO ]  CUDA is not available. Using CPU.
+2026-02-11 21:09:27,619 [MainThread  ] [INFO ]  Loading model...
+2026-02-11 21:11:22,079 [MainThread  ] [INFO ]  Loading model... Done.
+2026-02-11 21:12:18,033 [MainThread  ] [INFO ]  CUDA is not available. Using CPU.
+2026-02-11 21:12:18,035 [MainThread  ] [INFO ]  Loading model...
+2026-02-11 21:12:37,829 [MainThread  ] [INFO ]  Loading model... Done.
+2026-02-11 21:16:43,555 [Thread-3 (pr] [INFO ]  IP: 192.168.28.239:45108 - Incoming String: 000100000006010300000001, Incoming Raw: b'\x00\x01\x00\x00\x00\x06\x01\x03\x00\x00\x00\x01'
+2026-02-11 21:16:45,397 [Thread-3 (pr] [INFO ]  IP: 192.168.28.239:45108 - Outgoing String: 00e030200000, Outgoing Raw: b'\x00\xe00 \x00\x00'

@@ -1,39 +1,51 @@
-version: "3.8"
-
 services:
   mongo:
-    build:
-      context: ../docker
-      dockerfile: mongo.Dockerfile
+    image: mongo:latest
     container_name: llmpot-mongo
+    restart: unless-stopped
     volumes:
       - ./data/mongo:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
     command: --quiet
-    restart: unless-stopped
 
   web_app:
     build:
       context: ..
       dockerfile: emulator/web.Dockerfile
     container_name: llmpot-web
+    restart: unless-stopped
+    depends_on:
+      - mongo
+    environment:
+      MONGO_HOST: mongo
+      MONGO_USER: root
+      MONGO_PWD: root
     volumes:
       - ./logs/web:/app/logs
     ports:
-      - "8080:80"
-      - "8443:443"
-    depends_on:
-      - mongo
-    restart: unless-stopped
+      - "8080:8080"
+      - "8443:8443"
 
   modbus_app:
     build:
       context: ..
       dockerfile: emulator/modbus.Dockerfile
+      args:
+        EXPERIMENT_PATH: ./experiments/byt5-small/wdt_normal_c0_200.json
+        EXPERIMENT: wdt_normal_c0_200.json
+        CHECKPOINT_PATH: checkpoints/byt5-small/wdt_normal_c0_200.json/mbtcp-client-c0-s200-f1_3-v0_0-a1_36-sc9-sr3/20260203T1604/
+        CHECKPOINT_PATH_TARGET: checkpoints/byt5-small/wdt_normal_c0_200.json/mbtcp-client-c0-s200-f1_3-v0_0-a1_36-sc9-sr3/20260203T1604/
     container_name: llmpot-modbus
+    restart: unless-stopped
+    depends_on:
+      - mongo
+    environment:
+      MONGO_HOST: mongo
+      MONGO_USER: root
+      MONGO_PWD: root
     volumes:
       - ./logs/modbus:/app/logs
     ports:
-      - "1502:502"
-    depends_on:
-      - mongo
-    restart: unless-stopped
+      - "1502:5020"

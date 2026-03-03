@@ -22,7 +22,12 @@ def log_transport(func):
             logger.warning(request)
             logger.warning(request.environ)
             environment = request.environ
-            client_ip = environment["HTTP_X_FORWARDED_FOR"]
+            # client_ip = environment["HTTP_X_FORWARDED_FOR"] #! this original one causes error.
+            client_ip = environment.get(
+                "HTTP_X_FORWARDED_FOR",
+                environment.get("REMOTE_ADDR", "unknown")
+            )
+
             request_method = environment["REQUEST_METHOD"]
             request_uri = environment["RAW_URI"]
 
