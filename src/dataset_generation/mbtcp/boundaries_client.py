@@ -160,6 +160,7 @@ class BoundariesClient(MbtcpClient):
 
 
 def main():
+    # python -m src.dataset_generation.mbtcp.boundaries_client -ip 192.168.170.24 -p 502 -num 100
     client = BoundariesClient(*retrieve_args(), addresses=RangeModel(low=0, high=10), values=RangeModel(low=0, high=10), max_elements=2)
     try:
         client.start_client()

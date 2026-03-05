@@ -14,6 +14,7 @@ from src.dataset_generation.parse import parse_with_file
 from src.dataset_generation.split import split
 from src.finetune.model.finetuner_model import FinetunerModel
 
+# command: python -m src.dataset_generation.create_dataset -p 502 -intrf ens33 -model byt5-small -exp mbtcp-protocol-emulation.json -o 1
 
 def parse_packets(port: int, protocol: str, context_length: int, output_filename: str, experiment: str):
     # This is the function responsible for parsing the packets captured in temp.pcap #! which we can change the file name and make it our own pcap files.
