@@ -12,12 +12,9 @@ What it does:
 7) Create experiments/byt5-small/<experiment_name>.json with those extracted fields
 
 Usage example (PowerShell):
-python .\run_llmpot_wdt_pipeline.py `
-  --pcap "E:\GitHub\LLMPot\Modbus_dataset\WDT\WDT\Network_dataset\pcap\capture.pcap" `
-  --out-csv "mbtcp-client-c0-s10000.csv" `
-  --context-len 512 `
-  --experiment-name "wdt-dataset-mbtcp-protocol-emulation-attack1-c0-10000" `
-  --max-iteration 10000
+python .\wdt_data_preparation_script.py `   --pcap "OPTA_Dataset\Test2_multi_ip" `
+   --csv "mbtcp-opta-test2-client-c0-s10000" `   --clen 0 `
+   --exp "opta-test2-dataset-mbtcp-protocol-emulation-c0-10000" `   --max_iter 10000
 """
 
 from __future__ import annotations
