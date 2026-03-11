@@ -45,9 +45,9 @@ async def main(port: int, interface: str, model: str, experiment: str, overwrite
             config = json.loads(config) # parse json
             finetuner_model = FinetunerModel(experiment, **config) # create finetuner model
             finetuner_model.experiment = experiment # this line is redundant...
-
+        print(f'Passed experiment configuration: {finetuner_model}')
         # As they mentioned in the paper, they test dataset of size x, then if not good enough, they test 2x and so on.
-        for dataset in finetuner_model.datasets:
+        for i,dataset in enumerate(finetuner_model.datasets):
             print(f'Experiment {dataset} running...')
 
             # They check if the dataset exists before, so do not repeat it unless overwrite is True
@@ -60,7 +60,7 @@ async def main(port: int, interface: str, model: str, experiment: str, overwrite
             # Assign the current dataset to the finetuner model
             finetuner_model.current_dataset = dataset
 
-
+            #! This is only used when we want to simulate the server ourself, but if we have real plc, we do not need it.
             if finetuner_model.current_dataset.server:
                 # for no_logic_server, server_class_str becomes NoLogicServer
                 server_class_str = ''.join(word.title() for word in finetuner_model.current_dataset.server.name.split('_'))
@@ -69,22 +69,29 @@ async def main(port: int, interface: str, model: str, experiment: str, overwrite
                 # open the folder dataset_generation/protocol/server_name.py and get the class server_class_str
                 # e.g. for no_logic_server, dataset_generation.mbtcp.no_logic_server.NoLogicServer
                 # then later we can instantiate it like server_class(ip, port, *args)
-                server_class = getattr(importlib.import_module(f"src.dataset_generation.{finetuner_model.current_dataset.protocol}.{finetuner_model.current_dataset.server.name}"), server_class_str)
+                # server_class = getattr(importlib.import_module(f"src.dataset_generation.{finetuner_model.current_dataset.protocol}.{finetuner_model.current_dataset.server.name}"), server_class_str)
                 client_class = getattr(importlib.import_module(f"src.dataset_generation.{finetuner_model.current_dataset.protocol}.{finetuner_model.current_dataset.client}"), client_class_str)
 
             # open tcpdump to capture packets on the given interface and write to temp.pcap which most probably will be deleted later
-            tcpdump_process = subprocess.Popen(["tcpdump", "-i", interface, "-w", f"{DATASET_DUMPS}/temp.pcap"])
-
+            # tshark_process = subprocess.Popen(["tcpdump", "-i", interface, "-w", f"{DATASET_DUMPS}/temp.pcap"])
+            tshark_process = subprocess.Popen([
+                "tshark",
+                "-i", interface,
+                "-w", f"{DATASET_DUMPS}/temp_{i}.pcap",
+                "-c", f"{dataset.size}", #! I added this to limit the captured traffic to the number of packets we need for the dataset, but they are supposed to have a way to stop it...
+                "-f", f"tcp port {port}",
+                 ]) #! I used tshark here instead of tcpdump to work on windows.
+            print(f"Started tshark with PID {tshark_process.pid} to capture packets on interface {interface} and write to {DATASET_DUMPS}/temp.pcap")
             args = getattr(finetuner_model.current_dataset, f"{finetuner_model.current_dataset.protocol}_args") # gets the class DatasetModel
             print(*args) # this returns all parameters of dataset, like protocol, size, functions and so on.
 
 
-            server_inst = server_class(connection_ip_addr, port, *args) # then we instantiate the server
+            # server_inst = server_class(connection_ip_addr, port, *args) # then we instantiate the server
 
-            server_thread = Process(target=server_inst.start, daemon=True)
-            server_thread.start()
+            # server_thread = Process(target=server_inst.start, daemon=True)
+            # server_thread.start()
 
-            time.sleep(10)
+            # time.sleep(10)
 
             client_inst = client_class(connection_ip_addr, port,
                                        finetuner_model.current_dataset.size,
@@ -96,27 +103,37 @@ async def main(port: int, interface: str, model: str, experiment: str, overwrite
             client_inst.start_client() # but this is always empty in all provided clients ??
             print(f'Experiment {dataset} finished.')
             thread = threading.Thread(target=client_inst.execute_functions, daemon=True)
+            print(f"Started client thread to execute functions on the server.")
             thread.start()
             thread.join()
 
-            server_thread.terminate()
-            server_thread.join()
+            # server_thread.terminate()
+            # server_thread.join()
 
-            time.sleep(1)
 
-            tcpdump_process.terminate()
-            tcpdump_process.wait()
+            # time.sleep(1)
 
-            parse = Process(target=parse_packets, args=[port, finetuner_model.current_dataset.protocol, finetuner_model.current_dataset.context, str(dataset),
-                                                        finetuner_model.experiment])
-            parse.start()
+            # Wait for the capture duration
+            # capture_duration = 120  # seconds — adjust as needed
+            # print(f"Capturing packets for {capture_duration} seconds...")
+            # time.sleep(capture_duration)
 
-            parse.join()
 
-            os.remove(f"{DATASET_DUMPS}/temp.pcap")
+            # tshark_process.terminate()
+            tshark_process.wait()
+
+            #! After the capture is done, we should have temp.pcap file in dataset_dumps folder, then we can parse it and split it into train, val and test sets., but for now this is not important
+            # parse = Process(target=parse_packets, args=[port, finetuner_model.current_dataset.protocol, finetuner_model.current_dataset.context, str(dataset),
+            #                                             finetuner_model.experiment])
+            # parse.start()
+
+            # parse.join()
+            # we should remove temp.pcap after parsing, but we can also keep it for debugging purposes, so I will comment it out for now.
+    #         os.remove(f"{DATASET_DUMPS}/temp.pcap")
     finally:
-        if os.path.exists(f"{DATASET_DUMPS}/temp.pcap"):
-            os.remove(f"{DATASET_DUMPS}/temp.pcap")
+        if os.path.exists(f"{DATASET_DUMPS}/temp_{i}.pcap"):
+            # os.remove(f"{DATASET_DUMPS}/temp.pcap")
+            print("I leaved it for debugging purposes, you can remove it manually from the dataset_dumps folder.")
 
 
 def init():

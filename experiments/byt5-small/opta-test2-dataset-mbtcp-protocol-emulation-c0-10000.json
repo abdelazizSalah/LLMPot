@@ -9,7 +9,7 @@
     {
       "protocol": "mbtcp",
       "size": 10000,
-      "client": "client",
+      "client": "boundaries_client",
       "functions": [
         5
       ],

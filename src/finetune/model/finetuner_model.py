@@ -14,13 +14,13 @@ import time
 from typing import List, Optional
 
 # valid percision formats for lighting
-from lightning.fabric.plugins.precision.precision import _PRECISION_INPUT
+# from lightning.fabric.plugins.precision.precision import _PRECISION_INPUT
 
 
 # authors modules for checkpoints and logging.
 from src.cfg import CHECKPOINTS, LOGS
 from src.finetune.model.database_model import DatasetModel
-from src.finetune.model.lora import Lora
+# from src.finetune.model.lora import Lora
 
 
 # This class is a container for inference-only experiments, used for evaluating the model.
@@ -57,7 +57,7 @@ class FinetunerModel:
     batch_size: int = 8
     target_max_token_len = 512
     source_max_token_len = 512
-    precision: _PRECISION_INPUT = "32"
+    # precision: _PRECISION_INPUT = "32"
     workers: int = 2 # I think this should increase to speed up data loading
 
     start_time: float
@@ -96,7 +96,7 @@ class FinetunerModel:
             purpose themodel’sobjective ingeneratinghexadecimal
             responses insteadofdoinglanguagetranslation.
     '''
-    lora: Lora
+    # lora: Lora
 
 
     '''
@@ -129,9 +129,9 @@ class FinetunerModel:
 
         '''
         for key, value in kwargs.items():
-            if key == "lora":
-                self.lora = Lora(**value)
-            elif key == "datasets":
+            # if key == "lora":
+                # self.lora = Lora(**value)
+            if key == "datasets":
                 self.datasets = [DatasetModel(**x) for x in value]
             elif key == "test_experiment":
                 self.test_experiment = TestExperiment(**value)
