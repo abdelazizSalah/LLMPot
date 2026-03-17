@@ -37,26 +37,81 @@ class MbtcpClient(ModbusTcpClient):
         request = MbtcpCustomInvalidFunctionRequest(false_function_code)
         return self.execute(request)
 
-    def start_client(self): # why is it empty?
+    def start_client(self): # why is it empty? #! Because it will be overwritten by inherting classes
         pass
 
-    def execute_functions(self, delay: float = 0):
-        self.connect() # but this .connect() does not exist, but exist in pymodbus.client.ModbusTcpClient (parent)
-        for function, args, kwargs in self._functions:
-            request = function(*args, **kwargs)
-            self.transaction.tid = self.transaction_ids.pop()
+    # def execute_functions(self, delay: float = 0):
+    #     self.connect() # but this .connect() does not exist, but exist in pymodbus.client.ModbusTcpClient (parent)
+    #     for function, args, kwargs in self._functions:
+    #         request = function(*args, **kwargs)
+    #         self.transaction.tid = self.transaction_ids.pop()
 
-            if hasattr(request, "slave_id") and request.slave_id is None:
-                request.slave_id = 0
+    #         if hasattr(request, "slave_id") and request.slave_id is None:
+    #             # request.slave_id = 0 #! Changing the slaveId to 255
+    #             request.slave_id = 255
+    #         # print(f"Set slave_id to 255 for request: {function.__name__} with args: {args} and kwargs: {kwargs}")
 
-            response = self.execute(request)
-            time.sleep(delay)
-            if not response:
-                print(f"Not received response to request: {function.__name__} and {args}")
-            if function.__name__ == self.write_register.__name__:
-                time.sleep(0.05)
+    #         response = self.execute(request)
+    #         time.sleep(delay)
+    #         if not response:
+    #             print(f"Not received response to request: {function.__name__} and {args}")
+    #         if function.__name__ == self.write_register.__name__:
+    #             time.sleep(0.05)
 
 
+#! Custom generated function to overcome the disconnection issue of OPTA when we send too many requests in a short time, by reconnecting every 100 requests and adding a delay between batches.
+    def execute_functions(self, delay: float = 0, batch_size: int = 100, batch_pause: float = 2.0):
+        """
+        Execute all queued Modbus functions.
+        batch_size  : reconnect every N requests to avoid OPTA TCP exhaustion
+        batch_pause : seconds to wait between batches
+        """
+        self.connect()
+
+        for i, (function, args, kwargs) in enumerate(self._functions):
+
+            # --- Reconnect every batch_size requests ---
+            if i > 0 and i % batch_size == 0:
+                print(f"  [Batch {i // batch_size}] Pause {batch_pause}s to let OPTA recover...")
+                try:
+                    self.close()
+                except Exception:
+                    pass
+                time.sleep(batch_pause)
+                # Retry connect with backoff
+                for attempt in range(5):
+                    try:
+                        self.connect()
+                        print(f"  Reconnected after {attempt+1} attempt(s).")
+                        break
+                    except Exception as e:
+                        print(f"  Connect attempt {attempt+1} failed: {e}")
+                        time.sleep(5 * (attempt + 1))
+                else:
+                    print("  ❌ Could not reconnect after 5 attempts. Stopping.")
+                    break
+
+            try:
+                request = function(*args, **kwargs)
+                self.transaction.tid = self.transaction_ids.pop()
+
+                if hasattr(request, "slave_id"):
+                    request.slave_id = 255
+                if hasattr(request, "slave"):
+                    request.slave = 255
+
+                response = self.execute(request)
+                time.sleep(delay)
+
+                if not response:
+                    print(f"No response: {function.__name__} {args}")
+
+                if function.__name__ == self.write_register.__name__:
+                    time.sleep(0.05)
+
+            except Exception as e:
+                print(f"  ⚠️ Request {i} failed: {e} — skipping.")
+                continue
 def retrieve_args() -> Tuple[str, int, int, List[int]]:
     parser = argparse.ArgumentParser()
     parser.add_argument('-ip', default="localhost", required=False)

@@ -77,11 +77,11 @@ async def main(port: int, interface: str, model: str, experiment: str, overwrite
             tshark_process = subprocess.Popen([
                 "tshark",
                 "-i", interface,
-                "-w", f"{DATASET_DUMPS}/temp_{i}.pcap",
-                "-c", f"{dataset.size}", #! I added this to limit the captured traffic to the number of packets we need for the dataset, but they are supposed to have a way to stop it...
+                "-w", f"{DATASET_DUMPS}/temp_{dataset.size}.pcap",
+                # "-c", f"{dataset.size}", #! I added this to limit the captured traffic to the number of packets we need for the dataset, but they are supposed to have a way to stop it...
                 "-f", f"tcp port {port}",
                  ]) #! I used tshark here instead of tcpdump to work on windows.
-            print(f"Started tshark with PID {tshark_process.pid} to capture packets on interface {interface} and write to {DATASET_DUMPS}/temp.pcap")
+            print(f"Started tshark with PID {tshark_process.pid} to capture packets on interface {interface} and write to {DATASET_DUMPS}/temp_{dataset.size}.pcap")
             args = getattr(finetuner_model.current_dataset, f"{finetuner_model.current_dataset.protocol}_args") # gets the class DatasetModel
             print(*args) # this returns all parameters of dataset, like protocol, size, functions and so on.
 
@@ -111,7 +111,7 @@ async def main(port: int, interface: str, model: str, experiment: str, overwrite
             # server_thread.join()
 
 
-            # time.sleep(1)
+            time.sleep(5)
 
             # Wait for the capture duration
             # capture_duration = 120  # seconds — adjust as needed
@@ -119,7 +119,7 @@ async def main(port: int, interface: str, model: str, experiment: str, overwrite
             # time.sleep(capture_duration)
 
 
-            # tshark_process.terminate()
+            tshark_process.terminate()
             tshark_process.wait()
 
             #! After the capture is done, we should have temp.pcap file in dataset_dumps folder, then we can parse it and split it into train, val and test sets., but for now this is not important
@@ -131,7 +131,7 @@ async def main(port: int, interface: str, model: str, experiment: str, overwrite
             # we should remove temp.pcap after parsing, but we can also keep it for debugging purposes, so I will comment it out for now.
     #         os.remove(f"{DATASET_DUMPS}/temp.pcap")
     finally:
-        if os.path.exists(f"{DATASET_DUMPS}/temp_{i}.pcap"):
+        if os.path.exists(f"{DATASET_DUMPS}/temp_{dataset.size}.pcap"):
             # os.remove(f"{DATASET_DUMPS}/temp.pcap")
             print("I leaved it for debugging purposes, you can remove it manually from the dataset_dumps folder.")
 
