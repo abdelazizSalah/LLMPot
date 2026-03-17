@@ -5,6 +5,7 @@
   "target_max_token_len": 512,
   "source_max_token_len": 512,
   "batch_size": 1,
+  "precision" : 32,
   "datasets": [
 
     {
