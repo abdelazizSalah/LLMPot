@@ -319,6 +319,7 @@ def main() -> None:
     context_len = args.clen
 
     exp_name = args.exp
+    '''
         # ---------------------------
     # 10) Fine-tune (multi_trainer)
     # ---------------------------
@@ -338,7 +339,7 @@ def main() -> None:
         cwd=LLMPOT_ROOT,
     )
 
-
+    '''
     # ---------------------------
     # 11) Compute results (BCA/RVA)
     # ---------------------------
